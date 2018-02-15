@@ -14,11 +14,8 @@
 !/tmp/.keep
 
 .byebug_history
-
-config/database.yml
-config/secrets.yml
-
 spec/examples.txt
 
 # Ignore encrypted secrets key file.
+config/secrets.yml
 config/secrets.yml.key

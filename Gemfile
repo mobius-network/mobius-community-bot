@@ -2,8 +2,13 @@ source 'https://rubygems.org'
 
 git_source(:github) { |repo_name| "https://github.com/#{repo_name}.git" }
 
+ruby '~> 2.4'
+
 gem 'rails', '~> 5.1.4'
+gem 'redis', '~> 4.0'
+gem 'pg', '~> 1.0'
 gem 'puma', '~> 3.7'
+
 gem 'telegram-bot'
 gem 'telegram-bot-types'
 

@@ -5,12 +5,17 @@ git_source(:github) { |repo_name| "https://github.com/#{repo_name}.git" }
 ruby '~> 2.4'
 
 gem 'rails', '~> 5.1.4'
-gem 'redis', '~> 4.0'
+
+gem 'bigdecimal'
+gem 'dry-initializer', '~> 2.4'
+gem 'redis-rails', '~> 5.0'
+gem 'openssl'
 gem 'pg', '~> 1.0'
 gem 'puma', '~> 3.7'
-
-gem 'telegram-bot'
-gem 'telegram-bot-types'
+gem 'stellar-sdk', github: 'stellar/ruby-stellar-sdk'
+gem 'sucker_punch', '~> 2.0'
+gem 'telegram-bot', '~> 0.13'
+gem 'telegram-bot-types', '~> 0.5'
 
 group :development do
   gem 'listen', '>= 3.0.5', '< 3.2'

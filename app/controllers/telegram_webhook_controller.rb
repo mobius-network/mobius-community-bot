@@ -85,7 +85,7 @@ class TelegramWebhookController < Telegram::Bot::UpdatesController
        ♾ [StellarTerm](https://stellarterm.com) (XLM)
        ♾ [Interstellar](https://interstellar.exchange) (XLM, Ƀ, Ł)
        ♾ [StellarPort](https://stellarport.io) (XLM)
-       ♾ [Stronghold](https://stronghold.co) (XLM, Ƀ, Ξ) 
+       ♾ [Stronghold](https://stronghold.co) (Ƀ, Ξ)
        ♾ [FireFly](https://fchain.io) (XLM, ¥)
 
       *Traditional*

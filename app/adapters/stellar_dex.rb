@@ -35,4 +35,17 @@ module StellarDEX
       client.get('order_book', **params).body
     end
   end
+
+  def account(address)
+    Rails.cache.fetch([:stellardex, :account, address], expires_in: 1.hour) do
+      client.get("accounts/#{address.to_s.upcase}").body
+    end
+  end
+
+  def asset
+    Rails.cache.fetch([:stellardex, :asset, :mobi], expires_in: 1.hour) do
+      code, issuer = MOBI_ASSET.split('-')
+      client.get("assets", asset_code: code, asset_issuer: issuer).body['_embedded']['records'].first
+    end
+  end
 end

@@ -1,6 +1,7 @@
 require 'faraday_middleware'
 
 class TelegramWebhookController < Telegram::Bot::UpdatesController
+  include ActionView::Helpers::NumberHelper
   include Telegram::Bot::UpdatesController::TypedUpdate
   include Telegram::Bot::Botan::ControllerHelpers
   use_session!
@@ -19,8 +20,8 @@ class TelegramWebhookController < Telegram::Bot::UpdatesController
     mobi_usd = mobi_xlm * xlm['price_usd'].to_d
     mobi_btc = mobi_xlm * xlm['price_btc'].to_d
 
-    respond_with :message, text: <<-MSG.strip_heredoc
-      #{mobi_xlm.truncate(4)} XLM ♾ #{(mobi_usd * 100).truncate(2)} ¢ ♾ #{(mobi_btc * 10**6).truncate(2)} μɃ
+    respond_with :message, parse_mode: 'Markdown', text: <<-MSG.strip_heredoc
+      `#{mobi_xlm.truncate(4)} XLM` ♾ `#{(mobi_usd * 100).truncate(2)} ¢` ♾ `#{(mobi_btc * 10**6).truncate(2)} μɃ`
     MSG
   end
 
@@ -65,7 +66,20 @@ class TelegramWebhookController < Telegram::Bot::UpdatesController
     MSG
   end
 
-  def onramps
+  def supply(*)
+    # 375,559,240.73 are in circulation
+    #  - pending remaining pre-sale distributions of 56,906,663.47
+    # 124,320,000.00 are locked until October 18, 2018
+    # 388,120,759.27 are held by the company for development and other purposes
+    result = CalculateCirculatingSupply.call
+    respond_with :message, text: <<-MSG.strip_heredoc, parse_mode: 'Markdown'
+      `#{number_with_precision(result.circulating_supply, precision: 0, delimiter: ',')} MOBI` in circulation
+      `#{number_with_precision(result.reserved_supply, precision: 0, delimiter: ',')} MOBI` reserved / locked up
+      `#{number_with_precision(result.total_supply, precision: 0, delimiter: ',')} MOBI` total
+    MSG
+  end
+
+  def onramps(*)
     respond_with :message, text: <<-MSG.strip_heredoc, parse_mode: 'Markdown', disable_web_page_preview: true
       *Stellar DEX*
        ♾ [StellarTerm](https://stellarterm.com) (XLM)
@@ -99,5 +113,4 @@ class TelegramWebhookController < Telegram::Bot::UpdatesController
     raise unless e.message.include?('QUERY_ID_INVALID')
     logger.info {"Ignoring telegram error: #{e.message}"}
   end
-
 end

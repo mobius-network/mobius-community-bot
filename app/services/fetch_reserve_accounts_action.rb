@@ -12,6 +12,7 @@ class FetchReserveAccountsAction
   def self.company_reserve_accounts
     [
         'GCHDGFUGRMN5BR74LEBUMHHTWYIBIMI6M2LL2K3EQSRUF6GV6MAT4ZQK', # main distribution
+        'GASQH4XYX2TR4KZE4VMUNELK4L5JPJQJEJZCMZHJ3L4ELPZGF6QGRLMD', # hot wallet
     ]
   end
 
@@ -23,8 +24,6 @@ class FetchReserveAccountsAction
   end
 
   def self.revoked_accounts
-
-
     %W[
       GBLP4BVBZDTJX3WSKCBNXVQYMP5SL42DQTHVWHJFQL7GLPBKG3NCEHEW
       GDWDEEZW225RODW4K5TXPBUISOYWVJBZ23TSUKWFJNE4QLHRL6AHGMBJ

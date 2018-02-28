@@ -41,7 +41,6 @@ class TelegramWebhookController < Telegram::Bot::UpdatesController
     stronghold_eth = StellarDEX.ticker('ETH-GBSTRH4QOTWNSVA6E4HFERETX4ZLSR3CIUBLK7AXYII277PFJC4BBYOG')
 
     gopax_krw = Gopax.ticker('KRW')
-    otcbtc_cny = OtcBtc.ticker('CNY')
     otcbtc_btc = OtcBtc.ticker('BTC')
     otcbtc_eth = OtcBtc.ticker('ETH')
 
@@ -62,7 +61,7 @@ class TelegramWebhookController < Telegram::Bot::UpdatesController
       #{BigDecimal(gopax_krw['ask'])} ₩
 
       *OTC-BTC*
-      #{BigDecimal(otcbtc_cny['buy']).truncate(4)} ¥ ♾ #{BigDecimal(otcbtc_btc['buy']) * 10**6} μɃ ♾ #{BigDecimal(otcbtc_eth['buy']) * 10**6} μΞ
+      #{BigDecimal(otcbtc_btc['buy']) * 10**6} μɃ ♾ #{BigDecimal(otcbtc_eth['buy']) * 10**6} μΞ
     MSG
   end
 
@@ -90,7 +89,7 @@ class TelegramWebhookController < Telegram::Bot::UpdatesController
 
       *Traditional*
        ♾ [GOPAX](https://www.gopax.co.kr) (₩)
-       ♾ [OTC BTC](https://otcbtc.com) (¥, Ƀ, Ξ)
+       ♾ [OTC BTC](https://otcbtc.com) (Ƀ, Ξ)
        ♾ [Gate.io](https://gate.io) (USD₮, Ƀ, Ξ)
     MSG
   end

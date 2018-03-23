@@ -44,6 +44,8 @@ class TelegramWebhookController < Telegram::Bot::UpdatesController
     otcbtc_btc = OtcBtc.ticker('BTC')
     otcbtc_eth = OtcBtc.ticker('ETH')
 
+    bitmart_eth = Bitmart.ticker('ETH').dig('data', 'c', -1)
+
     respond_with :message, parse_mode: 'Markdown', text: <<-MSG.strip_heredoc
       *Coinmarketcap*
       #{mobius[0]['price_usd'].to_d.truncate(4)} USD ♾ #{BigDecimal(mobius[0]['price_btc']) * 10**6} μɃ
@@ -59,6 +61,9 @@ class TelegramWebhookController < Telegram::Bot::UpdatesController
 
       *GOPAX*
       #{BigDecimal(gopax_krw['ask'])} ₩
+
+      *Bitmart*
+      #{BigDecimal(bitmart_eth) * 10**6} μΞ
 
       *OTC-BTC*
       #{BigDecimal(otcbtc_btc['buy']) * 10**6} μɃ ♾ #{BigDecimal(otcbtc_eth['buy']) * 10**6} μΞ
@@ -89,8 +94,9 @@ class TelegramWebhookController < Telegram::Bot::UpdatesController
 
       *Traditional*
        ♾ [GOPAX](https://www.gopax.co.kr) (₩)
-       ♾ [OTC BTC](https://otcbtc.com) (Ƀ, Ξ)
        ♾ [Gate.io](https://gate.io) (USD₮, Ƀ, Ξ)
+       ♾ [Bitmart](https://bitmart.com) (Ξ)
+       ♾ [OTC BTC](https://otcbtc.com) (Ƀ, Ξ)
     MSG
   end
 

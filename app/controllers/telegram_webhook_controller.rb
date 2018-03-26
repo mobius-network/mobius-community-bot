@@ -84,7 +84,7 @@ class TelegramWebhookController < Telegram::Bot::UpdatesController
   end
 
   def onramps(*)
-    respond_with :message, text: <<-MSG.strip_heredoc, parse_mode: 'Markdown', disable_web_page_preview: true
+    respond_with :message, text: <<-MSG.strip_heredoc, parse_mode: 'Markdown', disable_web_page_preview: true, disable_notification: true
       *Stellar DEX*
        ♾ [StellarTerm](https://stellarterm.com) (XLM)
        ♾ [Interstellar](https://interstellar.exchange) (XLM, Ƀ, Ł)

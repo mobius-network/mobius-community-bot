@@ -95,9 +95,13 @@ class TelegramWebhookController < Telegram::Bot::UpdatesController
       *Traditional*
        ♾ [GOPAX](https://www.gopax.co.kr) (₩)
        ♾ [Gate.io](https://gate.io) (USD₮, Ƀ, Ξ)
-       ♾ [Bitmart](https://bitmart.com) (Ξ)
        ♾ [OTC BTC](https://otcbtc.com) (Ƀ, Ξ)
     MSG
+
+    # Bitmart temporarily removed from On-Ramps because it's impossible to
+    # purchase and withdraw MOBI from there
+    #
+    # ♾ [Bitmart](https://bitmart.com) (Ξ)
   end
 
   protected

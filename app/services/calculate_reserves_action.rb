@@ -7,8 +7,8 @@ class CalculateReservesAction
     context.reserved_supply = 0.to_d
     context.reserve_accounts.each do |address|
       account = StellarDEX.account(address)
-      balance = account['balances'].find { |bal| bal['asset_code'] == 'MOBI' }
-      context.reserved_supply += BigDecimal(balance['balance'])
+      balance = Array(account['balances']).find { |bal| bal['asset_code'] == 'MOBI' }
+      context.reserved_supply += BigDecimal(balance['balance']) if balance
     end
     context.circulating_supply = context.total_supply - context.reserved_supply
   end

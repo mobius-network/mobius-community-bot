@@ -19,6 +19,6 @@ module OtcBtc
   end
 
   def ticker(asset)
-    tickers["mobi_#{asset.to_s.downcase}"]['ticker']
+    tickers.dig("mobi_#{asset.to_s.downcase}", 'ticker')
   end
 end

@@ -1,4 +1,15 @@
 en:
+  increment_votes_count_action:
+    light_service:
+      failures:
+        wrong_option: 'Wrong voting option'
+        already_voted: 'You already voted'
   telegram_webhook:
     start:
       hi: Hi there!
+    voteban:
+      message: '%{initiator} started voting to ban %{user_to_ban}'
+      vote_accepted: 'Your vote was accepted'
+      vote_results:
+        banned: 'Banned!'
+        saved: 'Saved!'

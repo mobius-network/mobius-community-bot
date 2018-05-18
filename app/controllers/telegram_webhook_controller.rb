@@ -47,9 +47,9 @@ class TelegramWebhookController < Telegram::Bot::UpdatesController
       *Coinmarketcap*
       #{format_quote(cmc_usd, :usd)} ♾ #{format_quote(cmc_xlm, :xlm)} ♾ #{format_quote(cmc_btc, :btc)}
 
-      *Stellar DEX* 
+      *Stellar DEX*
       #{format_quote(dex_xlm, :xlm)}
-            
+
       *stronghold.co*
       #{format_quote(stronghold_btc, :btc)} ♾ #{format_quote(stronghold_eth, :eth)}
 
@@ -95,6 +95,45 @@ class TelegramWebhookController < Telegram::Bot::UpdatesController
        ♾ [Bitmart](https://bitmart.com) (Ξ)
        ♾ [OTC BTC](https://otcbtc.com) (Ƀ, Ξ)
     MSG
+  end
+
+  def voteban(*)
+    user_to_ban = payload.reply_to_message.from
+    message = t('.message', initiator: from.username, user_to_ban: user_to_ban.username)
+
+    respond_with(
+      :message,
+      text: message,
+      reply_to_message_id: payload.reply_to_message['message_id'],
+      reply_markup: {
+        inline_keyboard: [
+          [
+            { text: 'Za', callback_data: VoteForBanUser::VOTE_FOR },
+            { text: 'Protiv', callback_data: VoteForBanUser::VOTE_AGAINST },
+          ],
+        ],
+      },
+    )
+  end
+
+  def callback_query(data)
+    user_to_ban = payload.message.reply_to_message.from
+    chat_id = payload.message.chat.id
+
+    context = VoteForBanUser.call(
+      chat_id: chat_id,
+      user_to_ban: user_to_ban.id,
+      voter: payload.from.username,
+      vote: data,
+    )
+
+    return answer_callback_query(context.message) unless context.success?
+
+    if context.result != :continue
+      edit_message(:text, text: t(".vote_results.#{context.result}"))
+    else
+      answer_callback_query(t(".vote_accepted"))
+    end
   end
 
   protected

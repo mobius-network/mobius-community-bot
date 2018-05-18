@@ -105,7 +105,7 @@ GEM
     i18n (0.9.5)
       concurrent-ruby (~> 1.0)
     ice_nine (0.11.2)
-    light-service (0.9.0)
+    light-service (0.10.3)
       activesupport (>= 3.0)
     listen (3.1.5)
       rb-fsevent (~> 0.9, >= 0.9.4)
@@ -273,7 +273,7 @@ DEPENDENCIES
   dotenv-rails
   dry-initializer (~> 2.4)
   hirb
-  light-service
+  light-service (~> 0.10.3)
   listen (>= 3.0.5, < 3.2)
   openssl
   pg (~> 1.0)
@@ -298,4 +298,4 @@ RUBY VERSION
    ruby 2.4.2p198
 
 BUNDLED WITH
-   1.16.1
+   1.16.2

@@ -1,0 +1,19 @@
+{
+  "priceChange": "0%",
+  "symbolId": 24,
+  "website": "https://www.bitmart.com/trade.html?symbol=24",
+  "ask_1": "0.000110",
+  "anchorId": 16,
+  "anchorName": "ETH",
+  "pair": "MOBI_ETH",
+  "volume": "1035660.165628",
+  "coinId": 20,
+  "high_24h": "0.000110",
+  "low_24h": "0.000106",
+  "new_24h": "0.000110",
+  "closeTime": 1526562083555,
+  "bid_1": "0.000108",
+  "coinName": "MOBI",
+  "baseVolume": "112.309885",
+  "openTime": 1526475683555
+}

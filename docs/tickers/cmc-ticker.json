@@ -1,0 +1,35 @@
+{
+    "data": {
+        "id": 2429, 
+        "name": "Mobius", 
+        "symbol": "MOBI", 
+        "website_slug": "mobius", 
+        "rank": 314, 
+        "circulating_supply": 376657502.0, 
+        "total_supply": 887990859.0, 
+        "max_supply": null, 
+        "quotes": {
+            "XLM": {
+                "price": 0.232183926, 
+                "volume_24h": 821853.2846932239, 
+                "market_cap": 87453818.0, 
+                "percent_change_1h": 0.56, 
+                "percent_change_24h": 1.53, 
+                "percent_change_7d": -15.75
+            }, 
+            "USD": {
+                "price": 0.0767745, 
+                "volume_24h": 271756.0, 
+                "market_cap": 28917691.0, 
+                "percent_change_1h": 0.56, 
+                "percent_change_24h": 1.53, 
+                "percent_change_7d": -15.75
+            }
+        }, 
+        "last_updated": 1526561362
+    }, 
+    "metadata": {
+        "timestamp": 1526561170, 
+        "error": null
+    }
+}

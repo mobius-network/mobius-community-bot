@@ -12,9 +12,10 @@ module Gopax
     end
   end
 
-  def ticker(asset)
-    Rails.cache.fetch([:gopax, :ticker, asset], expires_in: 1.minute) do
-      client.get("/trading-pairs/MOBI-#{asset.to_s.upcase}/ticker/").body
+  def ticker(counter, base: :mobi)
+    pair = "#{base}-#{counter}".upcase
+    Rails.cache.fetch([:gopax, :ticker, pair], expires_in: 1.minute) do
+      client.get("/trading-pairs/#{pair}/ticker/").body
     end
   end
 end

@@ -14,7 +14,7 @@ module StellarDEX
   end
 
   def asset_params(asset, prefix: nil)
-    asset_code, asset_issuer = asset.split('-')
+    asset_code, asset_issuer = asset.to_s.upcase.split('-')
     asset_type = case asset_code
                  when 'XLM' then :native
                  when ->(v) { v.length <= 4 } then :credit_alphanum4

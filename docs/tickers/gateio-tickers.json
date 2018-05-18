@@ -1,0 +1,68 @@
+{
+  "xlm_usdt": {
+    "result": "true",
+    "last": "0.3275",
+    "lowestAsk": "0.3325",
+    "highestBid": "0.3257",
+    "percentChange": "-1.00",
+    "baseVolume": "37670.93521966",
+    "quoteVolume": "114527.87968069",
+    "high24hr": "0.3415",
+    "low24hr": "0.3189"
+  },
+  "xlm_eth": {
+    "result": "true",
+    "last": "0.00047",
+    "lowestAsk": "0.000471",
+    "highestBid": "0.000463",
+    "percentChange": "-0.21",
+    "baseVolume": "17.36654402",
+    "quoteVolume": "37061.61445351",
+    "high24hr": "0.000477",
+    "low24hr": "0.000458"
+  },
+  "xlm_btc": {
+    "result": "true",
+    "last": "0.00003998",
+    "lowestAsk": "0.00003985",
+    "highestBid": "0.00003921",
+    "percentChange": "0.71",
+    "baseVolume": "0.30280527",
+    "quoteVolume": "7615.28197818",
+    "high24hr": "0.00004059",
+    "low24hr": "0.0000392"
+  },
+  "mobi_usdt": {
+    "result": "true",
+    "last": "0.0762",
+    "lowestAsk": "0.0765",
+    "highestBid": "0.0762",
+    "percentChange": "2.70",
+    "baseVolume": "104355.31423187",
+    "quoteVolume": "1379777.94794037",
+    "high24hr": "0.0837",
+    "low24hr": "0.0713"
+  },
+  "mobi_eth": {
+    "result": "true",
+    "last": "0.000107",
+    "lowestAsk": "0.000111",
+    "highestBid": "0.000107",
+    "percentChange": "-0.93",
+    "baseVolume": "35.93669836",
+    "quoteVolume": "332183.78898594",
+    "high24hr": "0.000115",
+    "low24hr": "0.000103"
+  },
+  "mobi_btc": {
+    "result": "true",
+    "last": "0.00000928",
+    "lowestAsk": "0.00000926",
+    "highestBid": "0.00000898",
+    "percentChange": "4.62",
+    "baseVolume": "0.18273110",
+    "quoteVolume": "19898.13887715",
+    "high24hr": "0.00000957",
+    "low24hr": "0.00000882"
+  }
+}

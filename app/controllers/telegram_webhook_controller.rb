@@ -13,60 +13,57 @@ class TelegramWebhookController < Telegram::Bot::UpdatesController
   end
 
   def price(*)
-    mobi = StellarDEX.ticker('XLM')
-    xlm = CoinMarketCap.ticker('stellar')[0]
-
-    mobi_xlm = mobi['asks'][0]['price'].to_d
-    mobi_usd = mobi_xlm * xlm['price_usd'].to_d
-    mobi_btc = mobi_xlm * xlm['price_btc'].to_d
+    cmc_usd = CoinMarketCap.ticker(:usd).dig('price')
+    cmc_xlm = CoinMarketCap.ticker(:xlm).dig('price')
+    cmc_btc = CoinMarketCap.ticker(:btc).dig('price')
+    cmc_eth = CoinMarketCap.ticker(:eth).dig('price')
 
     respond_with :message, parse_mode: 'Markdown', text: <<-MSG.strip_heredoc
-      `#{mobi_xlm.truncate(4)} XLM` ♾ `#{(mobi_usd * 100).truncate(2)} ¢` ♾ `#{(mobi_btc * 10**6).truncate(2)} μɃ`
+      `#{format_quote(cmc_usd, :usd)}` ♾ `#{format_quote(cmc_xlm, :xlm)}` ♾ `#{format_quote(cmc_btc, :btc)}` ♾ `#{format_quote(cmc_eth, :eth)}`
     MSG
   end
 
   def full_price(*)
-    # MOBI-GA6HCMBLTZS5VYYBCATRBRZ3BZJMAFUDKYYF6AH6MVCMGWMRDNSWJPIH
-    # MOBI-mobius.network/XLM-native
+    cmc_usd = CoinMarketCap.ticker(:usd).dig('price')
+    cmc_xlm = CoinMarketCap.ticker(:xlm).dig('price')
+    cmc_btc = CoinMarketCap.ticker(:btc).dig('price')
 
-    mobius = CoinMarketCap.ticker('mobius')
+    gate_usdt = GateIO.ticker(:usdt).dig('lowestAsk')
+    gate_btc = GateIO.ticker(:btc).dig('lowestAsk')
+    gate_eth = GateIO.ticker(:eth).dig('lowestAsk')
 
-    gate_usdt = GateIO.ticker('mobi_usdt')
-    gate_btc = GateIO.ticker('mobi_btc')
-    gate_eth = GateIO.ticker('mobi_eth')
+    dex_xlm = StellarDEX.ticker(:xlm).dig('asks', 0, 'price')
 
-    dex_xlm = StellarDEX.ticker('XLM')
+    stronghold_btc = StellarDEX.ticker('BTC-GBSTRH4QOTWNSVA6E4HFERETX4ZLSR3CIUBLK7AXYII277PFJC4BBYOG').dig('asks', 0, 'price')
+    stronghold_eth = StellarDEX.ticker('ETH-GBSTRH4QOTWNSVA6E4HFERETX4ZLSR3CIUBLK7AXYII277PFJC4BBYOG').dig('asks', 0, 'price')
 
-    stronghold_btc = StellarDEX.ticker('BTC-GBSTRH4QOTWNSVA6E4HFERETX4ZLSR3CIUBLK7AXYII277PFJC4BBYOG')
-    stronghold_eth = StellarDEX.ticker('ETH-GBSTRH4QOTWNSVA6E4HFERETX4ZLSR3CIUBLK7AXYII277PFJC4BBYOG')
+    gopax_krw = Gopax.ticker(:krw).dig('ask')
 
-    gopax_krw = Gopax.ticker('KRW')
-    # otcbtc_btc = OtcBtc.ticker('BTC')
-    otcbtc_eth = OtcBtc.ticker('ETH').dig('buy')
+    bitmart_eth = Bitmart.ticker(:eth).dig('ask_1')
 
-    bitmart_eth = Bitmart.ticker('ETH').dig('data', 'c', -1)
+    otcbtc_eth = OtcBtc.ticker(:eth).dig('sell')
 
     respond_with :message, parse_mode: 'Markdown', text: <<-MSG.strip_heredoc
       *Coinmarketcap*
-      #{mobius[0]['price_usd'].to_d.truncate(4)} USD ♾ #{BigDecimal(mobius[0]['price_btc']) * 10**6} μɃ
+      #{format_quote(cmc_usd, :usd)} ♾ #{format_quote(cmc_xlm, :xlm)} ♾ #{format_quote(cmc_btc, :btc)}
 
       *Stellar DEX* 
-      #{BigDecimal(dex_xlm['asks'][0]['price']).truncate(4)} XLM
+      #{format_quote(dex_xlm, :xlm)}
             
       *stronghold.co*
-      #{BigDecimal(stronghold_btc['asks'][0]['price']) * 10**6} μɃ ♾ #{BigDecimal(stronghold_eth['asks'][0]['price']) * 10**6} μΞ
+      #{format_quote(stronghold_btc, :btc)} ♾ #{format_quote(stronghold_eth, :eth)}
 
       *Gate.io*
-      #{BigDecimal(gate_usdt['last'].to_s).truncate(4)} USD₮ ♾ #{BigDecimal(gate_btc['last'].to_s) * 10**6} μɃ ♾ #{BigDecimal(gate_eth['last'].to_s) * 10**6} μΞ
+      #{format_quote(gate_usdt, :usdt)} ♾ #{format_quote(gate_btc, :btc)} ♾ #{format_quote(gate_eth, :eth)}
 
       *GOPAX*
-      #{BigDecimal(gopax_krw['ask'])} ₩
+      #{format_quote(gopax_krw, :krw)}
 
       *Bitmart*
-      #{BigDecimal(bitmart_eth) * 10**6} μΞ
+      #{format_quote(bitmart_eth, :eth)}
 
       *OTC-BTC*
-      #{BigDecimal(otcbtc_eth) * 10**6} μΞ
+      #{format_quote(otcbtc_eth, :eth)}
     MSG
   end
 
@@ -95,13 +92,9 @@ class TelegramWebhookController < Telegram::Bot::UpdatesController
       *Traditional*
        ♾ [GOPAX](https://www.gopax.co.kr) (₩)
        ♾ [Gate.io](https://gate.io) (USD₮, Ƀ, Ξ)
+       ♾ [Bitmart](https://bitmart.com) (Ξ)
        ♾ [OTC BTC](https://otcbtc.com) (Ƀ, Ξ)
     MSG
-
-    # Bitmart temporarily removed from On-Ramps because it's impossible to
-    # purchase and withdraw MOBI from there
-    #
-    # ♾ [Bitmart](https://bitmart.com) (Ξ)
   end
 
   protected
@@ -122,4 +115,23 @@ class TelegramWebhookController < Telegram::Bot::UpdatesController
     raise unless e.message.include?('QUERY_ID_INVALID')
     logger.info {"Ignoring telegram error: #{e.message}"}
   end
+
+  private
+
+  def format_quote(amount, currency)
+    return nil unless amount
+    amount = amount.to_s
+    currency = currency.to_sym
+    symbol = SYMBOLS[currency]
+    case currency
+    when :btc, :eth
+      "#{BigDecimal(amount) * 10**6} μ#{symbol}"
+    when :xlm, :usd, :usdt
+      "#{BigDecimal(amount).truncate(4)} #{symbol}"
+    else
+      "#{BigDecimal(amount)} #{symbol}"
+    end
+  end
+
+  SYMBOLS = { btc: 'Ƀ', ltc: 'Ł', eth: 'Ξ', krw: '₩', usdt: 'USD₮', usd: 'USD', xlm: 'XLM' }
 end

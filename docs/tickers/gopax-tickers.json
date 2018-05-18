@@ -1,0 +1,192 @@
+[
+  {
+    "name": "ETH-KRW",
+    "baseAsset": "ETH",
+    "quoteAsset": "KRW"
+  },
+  {
+    "name": "BTC-KRW",
+    "baseAsset": "BTC",
+    "quoteAsset": "KRW"
+  },
+  {
+    "name": "BCH-KRW",
+    "baseAsset": "BCH",
+    "quoteAsset": "KRW"
+  },
+  {
+    "name": "XLM-KRW",
+    "baseAsset": "XLM",
+    "quoteAsset": "KRW"
+  },
+  {
+    "name": "ZEC-KRW",
+    "baseAsset": "ZEC",
+    "quoteAsset": "KRW"
+  },
+  {
+    "name": "LTC-KRW",
+    "baseAsset": "LTC",
+    "quoteAsset": "KRW"
+  },
+  {
+    "name": "ETH-BTC",
+    "baseAsset": "ETH",
+    "quoteAsset": "BTC"
+  },
+  {
+    "name": "BCH-BTC",
+    "baseAsset": "BCH",
+    "quoteAsset": "BTC"
+  },
+  {
+    "name": "XLM-BTC",
+    "baseAsset": "XLM",
+    "quoteAsset": "BTC"
+  },
+  {
+    "name": "ZEC-BTC",
+    "baseAsset": "ZEC",
+    "quoteAsset": "BTC"
+  },
+  {
+    "name": "LTC-BTC",
+    "baseAsset": "LTC",
+    "quoteAsset": "BTC"
+  },
+  {
+    "name": "XLM-ETH",
+    "baseAsset": "XLM",
+    "quoteAsset": "ETH"
+  },
+  {
+    "name": "ENG-KRW",
+    "baseAsset": "ENG",
+    "quoteAsset": "KRW"
+  },
+  {
+    "name": "CVC-KRW",
+    "baseAsset": "CVC",
+    "quoteAsset": "KRW"
+  },
+  {
+    "name": "REQ-BTC",
+    "baseAsset": "REQ",
+    "quoteAsset": "BTC"
+  },
+  {
+    "name": "QASH-BTC",
+    "baseAsset": "QASH",
+    "quoteAsset": "BTC"
+  },
+  {
+    "name": "CND-BTC",
+    "baseAsset": "CND",
+    "quoteAsset": "BTC"
+  },
+  {
+    "name": "SNT-BTC",
+    "baseAsset": "SNT",
+    "quoteAsset": "BTC"
+  },
+  {
+    "name": "ZRX-BTC",
+    "baseAsset": "ZRX",
+    "quoteAsset": "BTC"
+  },
+  {
+    "name": "CND-KRW",
+    "baseAsset": "CND",
+    "quoteAsset": "KRW"
+  },
+  {
+    "name": "SNT-KRW",
+    "baseAsset": "SNT",
+    "quoteAsset": "KRW"
+  },
+  {
+    "name": "ZRX-KRW",
+    "baseAsset": "ZRX",
+    "quoteAsset": "KRW"
+  },
+  {
+    "name": "EOS-KRW",
+    "baseAsset": "EOS",
+    "quoteAsset": "KRW"
+  },
+  {
+    "name": "OMG-KRW",
+    "baseAsset": "OMG",
+    "quoteAsset": "KRW"
+  },
+  {
+    "name": "QTUM-KRW",
+    "baseAsset": "QTUM",
+    "quoteAsset": "KRW"
+  },
+  {
+    "name": "MOBI-KRW",
+    "baseAsset": "MOBI",
+    "quoteAsset": "KRW"
+  },
+  {
+    "name": "STEEM-KRW",
+    "baseAsset": "STEEM",
+    "quoteAsset": "KRW"
+  },
+  {
+    "name": "SBD-KRW",
+    "baseAsset": "SBD",
+    "quoteAsset": "KRW"
+  },
+  {
+    "name": "ELF-KRW",
+    "baseAsset": "ELF",
+    "quoteAsset": "KRW"
+  },
+  {
+    "name": "QASH-KRW",
+    "baseAsset": "QASH",
+    "quoteAsset": "KRW"
+  },
+  {
+    "name": "XRP-KRW",
+    "baseAsset": "XRP",
+    "quoteAsset": "KRW"
+  },
+  {
+    "name": "MKR-KRW",
+    "baseAsset": "MKR",
+    "quoteAsset": "KRW"
+  },
+  {
+    "name": "ZIL-KRW",
+    "baseAsset": "ZIL",
+    "quoteAsset": "KRW"
+  },
+  {
+    "name": "ZIL-BTC",
+    "baseAsset": "ZIL",
+    "quoteAsset": "BTC"
+  },
+  {
+    "name": "ZIL-ETH",
+    "baseAsset": "ZIL",
+    "quoteAsset": "ETH"
+  },
+  {
+    "name": "LOOM-KRW",
+    "baseAsset": "LOOM",
+    "quoteAsset": "KRW"
+  },
+  {
+    "name": "LOOM-BTC",
+    "baseAsset": "LOOM",
+    "quoteAsset": "BTC"
+  },
+  {
+    "name": "LOOM-ETH",
+    "baseAsset": "LOOM",
+    "quoteAsset": "ETH"
+  }
+]

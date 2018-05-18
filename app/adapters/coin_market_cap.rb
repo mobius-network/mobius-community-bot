@@ -1,5 +1,11 @@
 module CoinMarketCap
-  API_ENDPOINT = 'https://api.coinmarketcap.com/v1/'
+  API_ENDPOINT = 'https://api.coinmarketcap.com/v2/'
+
+  SYMBOLS = {
+    mobi: 2429,
+    xlm: 512
+  }
+
   module_function
 
   def client
@@ -11,9 +17,11 @@ module CoinMarketCap
     end
   end
 
-  def ticker(asset)
-    Rails.cache.fetch([:coinmarketcap, :ticker, asset], expires_in: 5.minutes) do
-      client.get("ticker/#{asset}/").body
+  def ticker(counter, base: :mobi)
+    symbol_id = SYMBOLS[base.to_sym]
+    convert = counter.to_s.upcase
+    Rails.cache.fetch([:coinmarketcap, :ticker, "#{base}_#{counter}"], expires_in: 5.minutes) do
+      client.get("ticker/#{symbol_id}/", convert: convert).body.dig('data', 'quotes', convert)
     end
   end
 end

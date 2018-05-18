@@ -1,9 +1,5 @@
 module Bitmart
-  API_ENDPOINT = 'https://api.bitmart.com/api/v1/'.freeze
-  SYMBOLS = {
-    mobi: { eth: 24 },
-    xlm: { eth: 23 },
-  }
+  API_ENDPOINT = 'https://api.bitmart.com'.freeze
 
   module_function
 
@@ -16,17 +12,10 @@ module Bitmart
     end
   end
 
-  def ticker(asset='ETH')
-    return unless symbol = SYMBOLS[:mobi][asset.downcase.to_sym]
-    ts = Time.now.to_i
-
-    client.get(
-      'market_kline',
-      sourceTimeZone: 'GMT+03',
-      symbol: symbol,
-      step: 5,
-      from: ts - 1800,
-      to: ts
-    ).body
+  def ticker(counter, base: :mobi)
+    pair = "#{base}_#{counter}".upcase
+    Rails.cache.fetch([:bitmart, :ticker, pair], expires_in: 5.minutes) do
+      client.get("ticker/#{pair}/").body
+    end
   end
 end

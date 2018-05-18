@@ -12,9 +12,10 @@ module GateIO
     end
   end
 
-  def ticker(pair)
+  def ticker(counter, base: :mobi)
+    pair = "#{base}_#{counter}".downcase
     Rails.cache.fetch([:gateio, :ticker, pair], expires_in: 5.minutes) do
-      client.get("ticker/#{pair.to_s.downcase}").body
+      client.get("ticker/#{pair}").body
     end
   end
 end

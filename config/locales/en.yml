@@ -13,3 +13,5 @@ en:
       vote_results:
         banned: 'Banned!'
         saved: 'Saved!'
+  jobs:
+    voting_expired: 'Voting is expired'

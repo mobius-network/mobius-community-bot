@@ -99,20 +99,26 @@ class TelegramWebhookController < Telegram::Bot::UpdatesController
 
   def voteban(*)
     user_to_ban = payload.reply_to_message.from
-    message = t('.message', initiator: from.username, user_to_ban: user_to_ban.username)
+    message = t(".message", initiator: from.username, user_to_ban: user_to_ban.username)
 
-    respond_with(
+    response = respond_with(
       :message,
       text: message,
-      reply_to_message_id: payload.reply_to_message['message_id'],
+      reply_to_message_id: payload.reply_to_message["message_id"],
       reply_markup: {
         inline_keyboard: [
           [
-            { text: 'Za', callback_data: VoteForBanUser::VOTE_FOR },
-            { text: 'Protiv', callback_data: VoteForBanUser::VOTE_AGAINST },
+            { text: "+", callback_data: VotesStorage::VOTE_FOR },
+            { text: "-", callback_data: VotesStorage::VOTE_AGAINST },
           ],
         ],
       },
+    )
+
+    ExpireBanVotingJob.perform_in(
+      ENV["VOTE_DURATION"] || 15 * 60,
+      chat.id,
+      response["result"]["message_id"],
     )
   end
 

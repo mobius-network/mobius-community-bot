@@ -5,6 +5,14 @@ class FetchVoteResultsAction
   promises :for_count, :against_count
 
   executed do |ctx|
-    ctx.for_count, ctx.against_count = ctx.votes_storage.fetch_voters.map(&:size)
+    for_voters, against_voters = ctx.votes_storage.fetch_voters
+
+    totalizer = proc { |v| User.admins.exists?(telegram_id: v) ? admin_weight : 1 }
+    ctx.for_count = for_voters.sum(&totalizer)
+    ctx.against_count = against_voters.sum(&totalizer)
+  end
+
+  def self.admin_weight
+    ENV["ADMIN_VOTE_WEIGHT"] || 5
   end
 end

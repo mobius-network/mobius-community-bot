@@ -8,10 +8,10 @@ en:
     start:
       hi: Hi there!
     voteban:
-      message: '%{initiator} started voting to ban %{user_to_ban}'
-      vote_accepted: 'Your vote was accepted'
+      message: '%{initiator} started voting to mute %{user_to_ban}'
       vote_results:
-        banned: 'Banned!'
-        saved: 'Saved!'
+        continue: 'Your vote was accepted'
+        banned: 'User %{user_to_ban} was muted'
+        saved: 'User %{user_to_ban} was saved from muting'
   jobs:
     voting_expired: 'Voting is expired'

@@ -99,7 +99,11 @@ class TelegramWebhookController < Telegram::Bot::UpdatesController
 
   def voteban(*)
     user_to_ban = payload.reply_to_message.from
-    message = t(".message", initiator: from.username, user_to_ban: user_to_ban.username)
+    message = t(
+      ".message",
+      initiator: from.username,
+      user_to_ban: user_to_ban.username || user_to_ban.id,
+    )
 
     response = respond_with(
       :message,
@@ -124,21 +128,25 @@ class TelegramWebhookController < Telegram::Bot::UpdatesController
 
   def callback_query(data)
     user_to_ban = payload.message.reply_to_message.from
-    chat_id = payload.message.chat.id
 
     context = VoteForBanUser.call(
-      chat_id: chat_id,
-      user_to_ban: user_to_ban.id,
-      voter: payload.from.username,
+      chat_id: payload.message.chat.id,
+      user_to_ban: user_to_ban,
+      voter: payload.from,
       vote: data,
     )
 
     return answer_callback_query(context.message) unless context.success?
 
+    message = t(
+      "telegram_webhook.voteban.vote_results.#{context.result}",
+      { user_to_ban: user_to_ban.username || user_to_ban.id }
+    )
+
     if context.result != :continue
-      edit_message(:text, text: t(".vote_results.#{context.result}"))
+      edit_message(:text, text: message)
     else
-      answer_callback_query(t(".vote_accepted"))
+      answer_callback_query(message)
     end
   end
 

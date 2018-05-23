@@ -99,6 +99,14 @@ class TelegramWebhookController < Telegram::Bot::UpdatesController
 
   def voteban(*)
     user_to_ban = payload.reply_to_message.from
+
+    if User.admins.exists?(telegram_id: user_to_ban.id)
+      return respond_with(
+        :message,
+        text: t(".cannot_ban_admins", user_to_ban: user_to_ban.username || user_to_ban.id),
+      )
+    end
+
     message = t(
       ".message",
       initiator: from.username,

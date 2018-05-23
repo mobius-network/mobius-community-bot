@@ -9,6 +9,7 @@ en:
       hi: Hi there!
     voteban:
       message: '%{initiator} started voting to mute %{user_to_ban}'
+      cannot_ban_admins: 'User %{user_to_ban} is admin, you cannot mute them'
       vote_results:
         continue: 'Your vote was accepted'
         banned: 'User %{user_to_ban} was muted'

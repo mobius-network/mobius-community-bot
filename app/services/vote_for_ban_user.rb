@@ -1,9 +1,6 @@
 class VoteForBanUser
   extend LightService::Organizer
 
-  BAN_THRESHOLD = 5
-  SAVE_THRESHOLD = 5
-
   after_actions (->(ctx) {
     if ctx.current_action == ResolveVotingAction && ctx.result != :continue
       ctx.votes_storage.clear
@@ -25,5 +22,13 @@ class VoteForBanUser
         FetchVoteResultsAction,
         ResolveVotingAction,
       )
+  end
+
+  def self.ban_votes_threshold
+    ENV["BAN_VOTES_THRESHOLD"] || 5
+  end
+
+  def self.save_votes_threshold
+    ENV["SAVE_VOTES_THRESHOLD"] || 5
   end
 end

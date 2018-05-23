@@ -5,9 +5,9 @@ class ResolveVotingAction
   promises :result
 
   executed do |ctx|
-    ctx.result = if ctx.for_count >= VoteForBanUser::BAN_THRESHOLD
+    ctx.result = if ctx.for_count >= VoteForBanUser.ban_votes_threshold
                    ban(ctx.chat_id, ctx.user_to_ban) ? :banned : :errored
-                 elsif ctx.against_count >= VoteForBanUser::SAVE_THRESHOLD
+                 elsif ctx.against_count >= VoteForBanUser.save_votes_threshold
                    :saved
                  else
                    :continue

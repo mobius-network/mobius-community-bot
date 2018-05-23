@@ -120,7 +120,8 @@ class TelegramWebhookController < Telegram::Bot::UpdatesController
     )
 
     ExpireBanVotingJob.perform_in(
-      ENV["VOTE_DURATION"] || 15 * 60,
+      ENV["VOTE_DURATION"] || 20,
+      VotesStorage.new(user_to_ban.id),
       chat.id,
       response["result"]["message_id"],
     )

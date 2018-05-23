@@ -1,7 +1,7 @@
 class VoteForBanUser
   extend LightService::Organizer
 
-  BAN_THRESHOLD = 1
+  BAN_THRESHOLD = 5
   SAVE_THRESHOLD = 5
 
   after_actions (->(ctx) {

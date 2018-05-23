@@ -4,7 +4,6 @@ class CreateUsers < ActiveRecord::Migration[5.1]
       t.integer :telegram_id
       t.string :username
       t.boolean :is_admin, default: false
-      t.boolean :is_muted, default: false
 
       t.timestamps
 

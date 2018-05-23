@@ -19,7 +19,6 @@ ActiveRecord::Schema.define(version: 20180522101657) do
     t.integer "telegram_id"
     t.string "username"
     t.boolean "is_admin", default: false
-    t.boolean "is_muted", default: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["telegram_id"], name: "index_users_on_telegram_id", unique: true

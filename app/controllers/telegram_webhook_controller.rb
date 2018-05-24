@@ -97,19 +97,16 @@ class TelegramWebhookController < Telegram::Bot::UpdatesController
     MSG
   end
 
-  def promote(username, *args)
+  def promote(username, *)
     return respond_with(:message, text: t(".access_denied")) unless user_is_admin_or_creator?
 
-    begin
-      User.find_by!(username: username).update(is_admin: true)
-    rescue ActiveRecord::RecordNotFound
-      User.create(username: username, is_admin: true)
-    end
+    user = User.find_or_initialize_by(username: username)
+    user.update!(is_admin: true)
 
     respond_with(:message, text: t(".promoted", user: username))
   end
 
-  def demote(username, *args)
+  def demote(username, *)
     return respond_with(:message, text: t(".access_denied")) unless user_is_admin_or_creator?
 
     User.where(username: username).update_all(is_admin: false)
@@ -119,10 +116,10 @@ class TelegramWebhookController < Telegram::Bot::UpdatesController
   def voteban(*)
     user_to_ban = payload.reply_to_message.from
 
-    if User.admins.exists?(telegram_id: user_to_ban.id)
+    if User.residents.exists?(telegram_id: user_to_ban.id)
       return respond_with(
         :message,
-        text: t(".cannot_ban_admins", user_to_ban: user_to_ban.username || user_to_ban.id),
+        text: t(".cannot_ban_residents", user_to_ban: user_to_ban.username || user_to_ban.id),
       )
     end
 

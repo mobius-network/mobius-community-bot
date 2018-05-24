@@ -3,7 +3,7 @@ class CreateUsers < ActiveRecord::Migration[5.1]
     create_table :users do |t|
       t.integer :telegram_id
       t.string :username
-      t.boolean :is_admin, default: false
+      t.boolean :is_resident, default: false
 
       t.timestamps
 

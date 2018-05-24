@@ -1,3 +1,3 @@
 class User < ApplicationRecord
-  scope :admins, -> { where(is_admin: true) }
+  scope :residents, -> { where(is_resident: true) }
 end

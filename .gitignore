@@ -7,6 +7,7 @@
 # Ignore bundler config.
 /.bundle
 /.ruby-version
+/.env
 
 # Ignore all logfiles and tempfiles.
 /log/*
@@ -18,5 +19,4 @@
 spec/examples.txt
 
 # Ignore encrypted secrets key file.
-config/secrets.yml
 config/secrets.yml.key

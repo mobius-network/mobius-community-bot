@@ -4,6 +4,7 @@ git_source(:github) { |repo_name| "https://github.com/#{repo_name}.git" }
 
 ruby '~> 2.4'
 
+gem 'dotenv-rails', require: 'dotenv/rails-now', groups: %i[development test]
 gem 'rails', '~> 5.1.4'
 
 gem 'bigdecimal'

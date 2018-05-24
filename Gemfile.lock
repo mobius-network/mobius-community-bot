@@ -71,6 +71,10 @@ GEM
       thread_safe (~> 0.3, >= 0.3.1)
     diff-lcs (1.3)
     digest-crc (0.4.1)
+    dotenv (2.2.1)
+    dotenv-rails (2.2.1)
+      dotenv (= 2.2.1)
+      railties (>= 3.2, < 5.2)
     dry-initializer (2.4.0)
     equalizer (0.0.11)
     erubi (1.7.0)
@@ -266,6 +270,7 @@ PLATFORMS
 DEPENDENCIES
   awesome_print
   bigdecimal
+  dotenv-rails
   dry-initializer (~> 2.4)
   hirb
   light-service

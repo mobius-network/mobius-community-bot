@@ -14,5 +14,11 @@ en:
         continue: 'Your vote was accepted'
         banned: 'User %{user_to_ban} was muted'
         saved: 'User %{user_to_ban} was saved from muting'
+    promote:
+      access_denied: "Only group administrator can do that"
+      promoted: "%{user} was successfully promoted!"
+    demote:
+      access_denied: "Only group administrator can do that"
+      demoted: "%{user} was successfully demoted!"
   jobs:
     voting_expired: 'Voting is expired'

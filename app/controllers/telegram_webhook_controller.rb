@@ -97,6 +97,25 @@ class TelegramWebhookController < Telegram::Bot::UpdatesController
     MSG
   end
 
+  def promote(username, *args)
+    return respond_with(:message, text: t(".access_denied")) unless user_is_admin_or_creator?
+
+    begin
+      User.find_by!(username: username).update(is_admin: true)
+    rescue ActiveRecord::RecordNotFound
+      User.create(username: username, is_admin: true)
+    end
+
+    respond_with(:message, text: t(".promoted", user: username))
+  end
+
+  def demote(username, *args)
+    return respond_with(:message, text: t(".access_denied")) unless user_is_admin_or_creator?
+
+    User.where(username: username).update_all(is_admin: false)
+    respond_with(:message, text: t(".demoted", user: username))
+  end
+
   def voteban(*)
     user_to_ban = payload.reply_to_message.from
 
@@ -196,4 +215,11 @@ class TelegramWebhookController < Telegram::Bot::UpdatesController
   end
 
   SYMBOLS = { btc: 'Ƀ', ltc: 'Ł', eth: 'Ξ', krw: '₩', usdt: 'USD₮', usd: 'USD', xlm: 'XLM' }
+
+  def user_is_admin_or_creator?
+    api_response = bot.get_chat_member(user_id: from.id, chat_id: chat.id)
+    user_status = api_response.dig("result", "status")
+
+    user_status.in?(%w[administrator creator])
+  end
 end

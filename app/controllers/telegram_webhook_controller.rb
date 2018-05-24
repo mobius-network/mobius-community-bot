@@ -4,6 +4,8 @@ class TelegramWebhookController < Telegram::Bot::UpdatesController
   include ActionView::Helpers::NumberHelper
   include Telegram::Bot::UpdatesController::TypedUpdate
   include Telegram::Bot::Botan::ControllerHelpers
+  include Telegram::Bot::UpdatesController::CallbackQueryContext
+
   use_session!
 
   before_action :botan_track_action
@@ -136,8 +138,8 @@ class TelegramWebhookController < Telegram::Bot::UpdatesController
       reply_markup: {
         inline_keyboard: [
           [
-            { text: "+", callback_data: VotesStorage::VOTE_FOR },
-            { text: "-", callback_data: VotesStorage::VOTE_AGAINST },
+            { text: "+", callback_data: "vote:#{VotesStorage::VOTE_FOR}" },
+            { text: "-", callback_data: "vote:#{VotesStorage::VOTE_AGAINST}" },
           ],
         ],
       },
@@ -151,14 +153,14 @@ class TelegramWebhookController < Telegram::Bot::UpdatesController
     )
   end
 
-  def callback_query(data)
+  def vote_callback_query(vote)
     user_to_ban = payload.message.reply_to_message.from
 
     context = VoteForBanUser.call(
       chat_id: payload.message.chat.id,
       user_to_ban: user_to_ban,
       voter: payload.from,
-      vote: data,
+      vote: vote,
     )
 
     return answer_callback_query(context.message) unless context.success?

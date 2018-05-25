@@ -37,6 +37,13 @@ class TelegramVoteBanController < Telegram::Bot::UpdatesController
       )
     end
 
+    if user_is_admin_or_creator?(user_to_ban)
+      return respond_with(
+        :message,
+        text: t(".cannot_ban_admin", user_to_ban: user_to_ban.username || user_to_ban.id),
+      )
+    end
+
     message = t(
       ".message",
       initiator: from.username,
@@ -91,12 +98,12 @@ class TelegramVoteBanController < Telegram::Bot::UpdatesController
 
   private
 
-  def user_is_admin_or_creator?
-    UserInfo.new(from.id).status(chat.id).in?(%w[administrator creator])
+  def user_is_admin_or_creator?(user)
+    UserInfo.new(user.id).status(chat.id).in?(%w[administrator creator])
   end
 
   def require_admin_or_creator
-    return if user_is_admin_or_creator?
+    return if user_is_admin_or_creator?(from)
     respond_with(:message, text: t(".access_denied"))
     throw :abort
   end

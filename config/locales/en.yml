@@ -7,13 +7,13 @@ en:
   telegram_webhook:
     start:
       hi: Hi there!
-    voteban:
-      message: '%{initiator} started voting to mute %{user_to_ban}'
-      cannot_ban_residents: 'User %{user_to_ban} is a resident, you cannot mute them'
-      vote_results:
-        continue: 'Your vote was accepted'
-        banned: 'User %{user_to_ban} was muted'
-        saved: 'User %{user_to_ban} was saved from muting'
+  telegram_vote_ban:
+    message: '%{initiator} started voting to mute %{user_to_ban}'
+    cannot_ban_residents: 'User %{user_to_ban} is a resident, you cannot mute them'
+    vote_results:
+      continue: 'Your vote was accepted'
+      banned: 'User %{user_to_ban} was muted'
+      saved: 'User %{user_to_ban} was saved from muting'
     promote:
       access_denied: "Only group administrator can do that"
       use_only_in_group: "This command cannot be invoke in private chat. Use it in group"

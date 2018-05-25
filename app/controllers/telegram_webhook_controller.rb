@@ -99,7 +99,9 @@ class TelegramWebhookController < Telegram::Bot::UpdatesController
     MSG
   end
 
-  def promote(username, *)
+  def promote(username = nil, *)
+    return respond_with(:message, text: t(".use_only_in_group")) if direct_message?
+    return respond_with(:message, text: t(".username_is_missing")) if username.nil?
     return respond_with(:message, text: t(".access_denied")) unless user_is_admin_or_creator?
 
     user = User.find_or_initialize_by(username: username)
@@ -108,7 +110,9 @@ class TelegramWebhookController < Telegram::Bot::UpdatesController
     respond_with(:message, text: t(".promoted", user: username))
   end
 
-  def demote(username, *)
+  def demote(username = nil, *)
+    return respond_with(:message, text: t(".use_only_in_group")) if direct_message?
+    return respond_with(:message, text: t(".username_is_missing")) if username.nil?
     return respond_with(:message, text: t(".access_denied")) unless user_is_admin_or_creator?
 
     User.where(username: username).update_all(is_admin: false)
@@ -220,5 +224,9 @@ class TelegramWebhookController < Telegram::Bot::UpdatesController
     user_status = api_response.dig("result", "status")
 
     user_status.in?(%w[administrator creator])
+  end
+
+  def direct_message?
+    from.id == chat.id
   end
 end

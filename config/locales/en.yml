@@ -16,9 +16,13 @@ en:
         saved: 'User %{user_to_ban} was saved from muting'
     promote:
       access_denied: "Only group administrator can do that"
+      use_only_in_group: "This command cannot be invoke in private chat. Use it in group"
+      username_is_missing: "Please, provide username `/promote <username>`"
       promoted: "%{user} was successfully promoted!"
     demote:
       access_denied: "Only group administrator can do that"
+      use_only_in_group: "This command cannot be invoke in private chat. Use it in group"
+      username_is_missing: "Please, provide username `/demote <username>`"
       demoted: "%{user} was successfully demoted!"
   jobs:
     voting_expired: 'Voting is expired'

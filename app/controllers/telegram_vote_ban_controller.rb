@@ -9,22 +9,20 @@ class TelegramVoteBanController < Telegram::Bot::UpdatesController
   before_action :require_group_chat, only: %i[promote demote]
   before_action :require_admin_or_creator, only: %i[promote demote]
 
-  before_action :asd, only: :voteban
-
   def promote(username = nil, *)
-    return respond_with(:message, text: t(".username_is_missing")) if username.nil?
+    return reply_with(:message, text: t(".username_is_missing")) if username.nil?
 
     user = User.find_or_initialize_by(username: username)
-    user.update!(is_admin: true)
+    user.update!(is_resident: true)
 
-    respond_with(:message, text: t(".promoted", user: username))
+    reply_with(:message, text: t(".promoted", user: username))
   end
 
   def demote(username = nil, *)
-    return respond_with(:message, text: t(".username_is_missing")) if username.nil?
+    return reply_with(:message, text: t(".username_is_missing")) if username.nil?
 
-    User.where(username: username).update_all(is_admin: false)
-    respond_with(:message, text: t(".demoted", user: username))
+    User.where(username: username).update_all(is_resident: false)
+    reply_with(:message, text: t(".demoted", user: username))
   end
 
   def voteban(*)
@@ -104,16 +102,12 @@ class TelegramVoteBanController < Telegram::Bot::UpdatesController
 
   def require_admin_or_creator
     return if user_is_admin_or_creator?(from)
-    respond_with(:message, text: t(".access_denied"))
+    reply_with(:message, text: t(".access_denied"))
     throw :abort
   end
 
-  def asd(*args)
-    binding.pry
-  end
-
   def require_group_chat
-    return if chat.type == "group"
+    return if chat.type != "private"
     respond_with(:message, text: t(".use_only_in_group"))
     throw :abort
   end

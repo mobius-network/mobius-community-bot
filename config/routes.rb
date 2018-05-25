@@ -7,10 +7,10 @@ module TelegramWebhooksRouter
     return unless command&.starts_with?("/")
 
     controller =
-      case
-      when command.in?(%w[/voteban /promote /demote])
+      case command
+      when %r(^\/(voteban|promote|demote))
         TelegramVoteBanController
-      when command.in?(%w[/price /full_price /supply /onramps])
+      when %r(^\/(price|full_price|onramps|supply))
         TelegramPricesController
       else
         TelegramWebhookController

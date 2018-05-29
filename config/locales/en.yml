@@ -1,4 +1,29 @@
 en:
+  increment_votes_count_action:
+    light_service:
+      failures:
+        wrong_option: 'Wrong voting option'
+        already_voted: 'You already voted'
   telegram_webhook:
     start:
       hi: Hi there!
+  telegram_vote_ban:
+    message: '%{initiator} started voting to mute %{user_to_ban}'
+    cannot_ban_residents: 'User %{user_to_ban} is a resident, you cannot mute them'
+    cannot_ban_admin: 'User %{user_to_ban} is an admin, you cannot mute them'
+    vote_results:
+      continue: 'Your vote was accepted'
+      banned: 'User %{user_to_ban} was muted'
+      saved: 'User %{user_to_ban} was saved from muting'
+    promote:
+      access_denied: "Only group administrator can do that"
+      use_only_in_group: "This command cannot be invoke in private chat. Use it in group"
+      username_is_missing: "Please, provide username `/promote <username>`"
+      promoted: "%{user} was successfully promoted!"
+    demote:
+      access_denied: "Only group administrator can do that"
+      use_only_in_group: "This command cannot be invoke in private chat. Use it in group"
+      username_is_missing: "Please, provide username `/demote <username>`"
+      demoted: "%{user} was successfully demoted!"
+  jobs:
+    voting_expired: 'Voting is expired'

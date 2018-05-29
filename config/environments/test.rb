@@ -1,5 +1,6 @@
 Rails.application.configure do
   # Make bots stubbed before processing routes.rb:
+  Telegram.reset_bots
   Telegram::Bot::ClientStub.stub_all!
 
   # Settings specified here will take precedence over those in config/application.rb.

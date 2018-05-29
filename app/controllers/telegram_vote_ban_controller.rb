@@ -51,7 +51,7 @@ class TelegramVoteBanController < Telegram::Bot::UpdatesController
     response = respond_with(
       :message,
       text: message,
-      reply_to_message_id: payload.reply_to_message["message_id"],
+      reply_to_message_id: payload.reply_to_message.message_id,
       reply_markup: {
         inline_keyboard: [
           [

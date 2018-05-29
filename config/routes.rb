@@ -2,6 +2,8 @@ module TelegramWebhooksRouter
   module_function
 
   def dispatch(bot, update)
+    return dispatch_callback(bot, update) if update.key?("callback_query")
+
     command = update.dig("message", "text")
 
     return unless command&.starts_with?("/")
@@ -17,6 +19,10 @@ module TelegramWebhooksRouter
       end
 
     controller.dispatch(bot, update)
+  end
+
+  def dispatch_callback(bot, update)
+    TelegramVoteBanController.dispatch(bot, update)
   end
 end
 

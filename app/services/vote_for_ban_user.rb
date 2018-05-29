@@ -25,10 +25,10 @@ class VoteForBanUser
   end
 
   def self.ban_votes_threshold
-    ENV["BAN_VOTES_THRESHOLD"] || 5
+    ENV["BAN_VOTES_THRESHOLD"]&.to_i || 5
   end
 
   def self.save_votes_threshold
-    ENV["SAVE_VOTES_THRESHOLD"] || 5
+    ENV["SAVE_VOTES_THRESHOLD"]&.to_i || 5
   end
 end

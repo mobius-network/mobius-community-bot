@@ -13,6 +13,6 @@ class FetchVoteResultsAction
   end
 
   def self.resident_weight
-    ENV["RESIDENT_VOTE_WEIGHT"] || 5
+    ENV["RESIDENT_VOTE_WEIGHT"]&.to_i || 5
   end
 end

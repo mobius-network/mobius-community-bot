@@ -4,12 +4,10 @@ module TelegramWebhooksRouter
   def dispatch(bot, update)
     return dispatch_callback(bot, update) if update.key?("callback_query")
 
-    command = update.dig("message", "text")
-
-    return unless command&.starts_with?("/")
+    message = update.dig("message", "text")
 
     controller =
-      case command
+      case message
       when %r(^\/(ban|promote|demote))
         TelegramVoteBanController
       when %r(^\/(price|full_price|onramps|supply))

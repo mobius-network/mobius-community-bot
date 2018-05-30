@@ -10,7 +10,7 @@ module TelegramWebhooksRouter
 
     controller =
       case command
-      when %r(^\/(voteban|promote|demote))
+      when %r(^\/(ban|promote|demote))
         TelegramVoteBanController
       when %r(^\/(price|full_price|onramps|supply))
         TelegramPricesController

@@ -25,7 +25,7 @@ class TelegramVoteBanController < Telegram::Bot::UpdatesController
     reply_with(:message, text: t(".demoted", user: username))
   end
 
-  def voteban(*)
+  def ban(*)
     user_to_ban = payload.reply_to_message.from
 
     if User.residents.exists?(telegram_id: user_to_ban.id)

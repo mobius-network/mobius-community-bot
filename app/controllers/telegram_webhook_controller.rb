@@ -12,13 +12,6 @@ class TelegramWebhookController < Telegram::Bot::UpdatesController
     respond_with :message, text: t('.hi')
   end
 
-  def message(*)
-    user = payload.from
-    User.create(telegram_id: user.id, username: user.username)
-  rescue ActiveRecord::RecordNotUnique
-    :noop
-  end
-
   protected
 
   # Ignore stale chats.

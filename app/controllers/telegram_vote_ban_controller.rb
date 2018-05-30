@@ -12,17 +12,19 @@ class TelegramVoteBanController < Telegram::Bot::UpdatesController
   def promote(username = nil, *)
     return reply_with(:message, text: t(".username_is_missing")) if username.nil?
 
-    user = User.find_or_initialize_by(username: username)
-    user.update!(is_resident: true)
+    was_promoted = ChangeResidentStatus.promote(payload)
 
-    reply_with(:message, text: t(".promoted", user: username))
+    reply = was_promoted ? ".promoted" : ".already_promoted"
+    reply_with(:message, text: t(reply, user: username))
   end
 
   def demote(username = nil, *)
     return reply_with(:message, text: t(".username_is_missing")) if username.nil?
 
-    User.where(username: username).update_all(is_resident: false)
-    reply_with(:message, text: t(".demoted", user: username))
+    was_demoted = ChangeResidentStatus.demote(payload)
+
+    reply = was_demoted ? ".demoted" : ".was_not_promoted"
+    reply_with(:message, text: t(reply, user: username))
   end
 
   def ban(*)

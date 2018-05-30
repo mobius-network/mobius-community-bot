@@ -42,6 +42,13 @@ class TelegramVoteBanController < Telegram::Bot::UpdatesController
       )
     end
 
+    context = VoteForBanUser.call(
+      chat_id: chat.id,
+      user_to_ban: user_to_ban,
+      voter: payload.from,
+      vote: VotesStorage::VOTE_FOR
+    )
+
     message = t(
       ".message",
       initiator: from.username,
@@ -52,21 +59,14 @@ class TelegramVoteBanController < Telegram::Bot::UpdatesController
       :message,
       text: message,
       reply_to_message_id: payload.reply_to_message.message_id,
-      reply_markup: {
-        inline_keyboard: [
-          [
-            { text: "+", callback_data: "vote:#{VotesStorage::VOTE_FOR}" },
-            { text: "-", callback_data: "vote:#{VotesStorage::VOTE_AGAINST}" },
-          ],
-        ],
-      },
+      reply_markup: vote_buttons_markup(context.result)
     )
 
     ExpireBanVotingJob.perform_in(
-      ENV["VOTE_DURATION"] || 15 * 60,
+      ENV["VOTE_DURATION"]&.to_i || 15 * 60,
       VotesStorage.new(user_to_ban.id),
       chat.id,
-      response["result"]["message_id"],
+      response.dig("result", "message_id"),
     )
   end
 
@@ -77,20 +77,26 @@ class TelegramVoteBanController < Telegram::Bot::UpdatesController
       chat_id: payload.message.chat.id,
       user_to_ban: user_to_ban,
       voter: payload.from,
-      vote: vote,
+      vote: vote
     )
 
     return answer_callback_query(context.message) unless context.success?
 
+    result = context.result
+
     message = t(
-      "telegram_vote_ban.vote_results.#{context.result}",
-      { user_to_ban: user_to_ban.username || user_to_ban.id }
+      "telegram_vote_ban.vote_results.#{result.resolution}",
+      user_to_ban: user_to_ban.username || user_to_ban.id
     )
 
-    if context.result != :continue
+    if result.resolution != :continue
       edit_message(:text, text: message)
     else
-      answer_callback_query(message)
+      edit_message(
+        :text,
+        text: payload.message.text,
+        reply_markup: vote_buttons_markup(result)
+      )
     end
   end
 
@@ -110,5 +116,21 @@ class TelegramVoteBanController < Telegram::Bot::UpdatesController
     return if chat.type != "private"
     respond_with(:message, text: t(".use_only_in_group"))
     throw :abort
+  end
+
+  def vote_buttons_markup(votes_results)
+    ban_btn_text =
+      "Ban (%{votes_for_count}/%{votes_for_threshold})" % votes_results.to_h
+    save_btn_text =
+      "Save (%{votes_against_count}/%{votes_against_threshold})" % votes_results.to_h
+
+    {
+      inline_keyboard: [
+        [
+          { text: ban_btn_text, callback_data: "vote:#{VotesStorage::VOTE_FOR}" },
+          { text: save_btn_text, callback_data: "vote:#{VotesStorage::VOTE_AGAINST}" },
+        ]
+      ]
+    }
   end
 end

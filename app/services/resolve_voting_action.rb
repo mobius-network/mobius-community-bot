@@ -5,13 +5,26 @@ class ResolveVotingAction
   promises :result
 
   executed do |ctx|
-    ctx.result = if ctx.for_count >= VoteForBanUser.ban_votes_threshold
-                   ban(ctx.chat_id, ctx.user_to_ban) ? :banned : :errored
-                 elsif ctx.against_count >= VoteForBanUser.save_votes_threshold
-                   :saved
-                 else
-                   :continue
-                 end
+    resolution =
+      if ctx.for_count >= VoteForBanUser.ban_votes_threshold
+        ban(ctx.chat_id, ctx.user_to_ban) ? :banned : :errored
+      elsif ctx.against_count >= VoteForBanUser.save_votes_threshold
+        :saved
+      else
+        :continue
+      end
+
+    ctx.result =
+      OpenStruct.new(vote_results_object(ctx).merge(resolution: resolution))
+  end
+
+  def self.vote_results_object(ctx)
+    {
+      votes_for_count: ctx.for_count,
+      votes_against_count: ctx.against_count,
+      votes_for_threshold: VoteForBanUser.ban_votes_threshold,
+      votes_against_threshold: VoteForBanUser.save_votes_threshold
+    }
   end
 
   def self.ban(chat_id, user)

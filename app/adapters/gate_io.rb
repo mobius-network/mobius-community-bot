@@ -18,4 +18,12 @@ module GateIO
       client.get("ticker/#{pair}").body
     end
   end
+
+  def ask(counter, **options)
+    ticker(counter, **options).dig('lowestAsk')
+  end
+
+  def name
+    'gate.io'
+  end
 end

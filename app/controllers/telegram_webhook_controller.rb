@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'faraday_middleware'
 
 class TelegramWebhookController < Telegram::Bot::UpdatesController
@@ -12,58 +14,28 @@ class TelegramWebhookController < Telegram::Bot::UpdatesController
     respond_with :message, text: t('.hi')
   end
 
-  def price(*)
-    cmc_usd = CoinMarketCap.ticker(:usd).dig('price')
-    cmc_xlm = CoinMarketCap.ticker(:xlm).dig('price')
-    cmc_btc = CoinMarketCap.ticker(:btc).dig('price')
-    cmc_eth = CoinMarketCap.ticker(:eth).dig('price')
+  def price(currency = nil, *)
+    cmc_price = ->(symbol) { [CoinMarketCap, symbol] }
+    cmc_prices = [:usd, :xlm, :btc, :eth].map(&cmc_price)
+    text = cmc_prices.map { |(ticker, symbol)| "`#{format_quote(ticker.ask(symbol), symbol)}`"}.join(' = ')
 
-    respond_with :message, parse_mode: 'Markdown', text: <<-MSG.strip_heredoc
-      `#{format_quote(cmc_usd, :usd)}` ♾ `#{format_quote(cmc_xlm, :xlm)}` ♾ `#{format_quote(cmc_btc, :btc)}` ♾ `#{format_quote(cmc_eth, :eth)}`
-    MSG
+    if currency && currency.downcase.to_sym.in?(TICKERS.keys)
+      tickers = TICKERS[currency.to_sym].map do |ticker|
+        if ticker.is_a?(Symbol)
+          TICKERS[ticker].map {|tck| [tck, ticker]}
+        else
+          [[ticker, currency.to_sym]]
+        end
+      end.flatten(1)
+      text += "\n\n#{tickers.map {|(ticker, symbol)| "➛ #{format_quote(ticker.ask(symbol), symbol)} @ #{ticker.name}"}.join("\n")}"
+    end
+
+    respond_with :message, text: text, parse_mode: 'Markdown', disable_notification: true
   end
 
   def full_price(*)
-    cmc_usd = CoinMarketCap.ticker(:usd).dig('price')
-    cmc_xlm = CoinMarketCap.ticker(:xlm).dig('price')
-    cmc_btc = CoinMarketCap.ticker(:btc).dig('price')
-
-    gate_usdt = GateIO.ticker(:usdt).dig('lowestAsk')
-    gate_btc = GateIO.ticker(:btc).dig('lowestAsk')
-    gate_eth = GateIO.ticker(:eth).dig('lowestAsk')
-
-    dex_xlm = StellarDEX.ticker(:xlm).dig('asks', 0, 'price')
-
-    stronghold_btc = StellarDEX.ticker('BTC-GBSTRH4QOTWNSVA6E4HFERETX4ZLSR3CIUBLK7AXYII277PFJC4BBYOG').dig('asks', 0, 'price')
-    stronghold_eth = StellarDEX.ticker('ETH-GBSTRH4QOTWNSVA6E4HFERETX4ZLSR3CIUBLK7AXYII277PFJC4BBYOG').dig('asks', 0, 'price')
-
-    gopax_krw = Gopax.ticker(:krw).dig('ask')
-
-    bitmart_eth = Bitmart.ticker(:eth).dig('ask_1')
-
-    otcbtc_eth = OtcBtc.ticker(:eth).dig('sell')
-
-    respond_with :message, parse_mode: 'Markdown', text: <<-MSG.strip_heredoc
-      *Coinmarketcap*
-      #{format_quote(cmc_usd, :usd)} ♾ #{format_quote(cmc_xlm, :xlm)} ♾ #{format_quote(cmc_btc, :btc)}
-
-      *Stellar DEX* 
-      #{format_quote(dex_xlm, :xlm)}
-            
-      *stronghold.co*
-      #{format_quote(stronghold_btc, :btc)} ♾ #{format_quote(stronghold_eth, :eth)}
-
-      *Gate.io*
-      #{format_quote(gate_usdt, :usdt)} ♾ #{format_quote(gate_btc, :btc)} ♾ #{format_quote(gate_eth, :eth)}
-
-      *GOPAX*
-      #{format_quote(gopax_krw, :krw)}
-
-      *Bitmart*
-      #{format_quote(bitmart_eth, :eth)}
-
-      *OTC-BTC*
-      #{format_quote(otcbtc_eth, :eth)}
+    respond_with :message, parse_mode: 'Markdown', disable_notification: true, text: <<-MSG.strip_heredoc
+      `/full_price` command is replaced by `/price <asset>` (asset: fiat, xlm, btc or eth)
     MSG
   end
 
@@ -83,17 +55,18 @@ class TelegramWebhookController < Telegram::Bot::UpdatesController
   def onramps(*)
     respond_with :message, text: <<-MSG.strip_heredoc, parse_mode: 'Markdown', disable_web_page_preview: true, disable_notification: true
       *Stellar DEX*
-       ♾ [StellarTerm](https://stellarterm.com) (XLM)
-       ♾ [Interstellar](https://interstellar.exchange) (XLM, Ƀ, Ł)
-       ♾ [StellarPort](https://stellarport.io) (XLM)
-       ♾ [Stronghold](https://stronghold.co) (Ƀ, Ξ)
-       ♾ [FireFly](https://fchain.io) (XLM, ¥)
+       ➛ [StellarTerm](https://stellarterm.com) (XLM)
+       ➛ [Interstellar](https://interstellar.exchange) (XLM, Ƀ, Ł)
+       ➛ [StellarPort](https://stellarport.io) (XLM)
+       ➛ [Stronghold](https://stronghold.co) (Ƀ, Ξ)
+       ➛ [FireFly](https://fchain.io) (XLM, ¥)
 
       *Traditional*
-       ♾ [GOPAX](https://www.gopax.co.kr) (₩)
-       ♾ [Gate.io](https://gate.io) (USD₮, Ƀ, Ξ)
-       ♾ [Bitmart](https://bitmart.com) (Ξ)
-       ♾ [OTC BTC](https://otcbtc.com) (Ƀ, Ξ)
+       ➛ [Gate.io](https://gate.io) (USD₮, Ƀ, Ξ)
+       ➛ [KuCoin](https://www.kucoin.com) (Ƀ, Ξ)      
+       ➛ [GOPAX](https://www.gopax.co.kr) (₩)
+       ➛ [Bitmart](https://bitmart.com) (Ξ)
+       ➛ [OTC BTC](https://otcbtc.com) (Ƀ, Ξ)
     MSG
   end
 
@@ -120,18 +93,28 @@ class TelegramWebhookController < Telegram::Bot::UpdatesController
 
   def format_quote(amount, currency)
     return nil unless amount
-    amount = amount.to_s
+    amount = BigDecimal(amount.to_s)
     currency = currency.to_sym
-    symbol = SYMBOLS[currency]
-    case currency
-    when :btc, :eth
-      "#{BigDecimal(amount) * 10**6} μ#{symbol}"
-    when :xlm, :usd, :usdt
-      "#{BigDecimal(amount).truncate(4)} #{symbol}"
-    else
-      "#{BigDecimal(amount)} #{symbol}"
+    symbol = +SYMBOLS[currency]
+    if currency.in? [:btc, :eth]
+      amount *= 10**6
+      symbol.prepend("μ")
     end
+    number_to_currency(
+      amount,
+      unit: symbol,
+      format: '%n %u',
+      precision: 3
+    )
   end
 
-  SYMBOLS = { btc: 'Ƀ', ltc: 'Ł', eth: 'Ξ', krw: '₩', usdt: 'USD₮', usd: 'USD', xlm: 'XLM' }
+  SYMBOLS = { btc: 'Ƀ', ltc: 'Ł', eth: 'Ξ', krw: '₩', usdt: 'USD₮', usd: 'USD', xlm: 'XLM' }.freeze
+  TICKERS = {
+    usdt: [GateIO],
+    xlm: [StellarDEX],
+    btc: [GateIO, Kucoin, Stronghold],
+    eth: [GateIO, Kucoin, Stronghold, Bitmart, OtcBtc],
+    krw: [Gopax],
+    fiat: [:usdt, :krw],
+  }
 end

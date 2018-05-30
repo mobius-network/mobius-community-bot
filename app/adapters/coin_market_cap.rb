@@ -24,4 +24,8 @@ module CoinMarketCap
       client.get("ticker/#{symbol_id}/", convert: convert).body.dig('data', 'quotes', convert)
     end
   end
+
+  def ask(counter, **options)
+    ticker(counter, **options).dig('price')
+  end
 end

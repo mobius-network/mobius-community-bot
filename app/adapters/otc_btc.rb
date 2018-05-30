@@ -18,7 +18,16 @@ module OtcBtc
     end
   end
 
-  def ticker(asset)
-    tickers.dig("mobi_#{asset.to_s.downcase}", 'ticker')
+  def ticker(counter, base: :mobi)
+    pair = "#{base}_#{counter}".downcase
+    tickers.dig(pair, 'ticker')
+  end
+
+  def ask(counter, **options)
+    ticker(counter, **options).dig('sell')
+  end
+
+  def name
+    'otcbtc.com'
   end
 end

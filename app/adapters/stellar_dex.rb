@@ -26,14 +26,19 @@ module StellarDEX
     params
   end
 
-  def ticker(asset)
-    Rails.cache.fetch([:stellardex, :ticker, asset], expires_in: 3.minutes) do
+  def ticker(counter, base: MOBI_ASSET)
+    pair = "#{counter}/#{base}"
+    Rails.cache.fetch([:stellardex, :ticker, pair], expires_in: 3.minutes) do
       params = {
-          **asset_params(asset, prefix: :buying),
-          **asset_params(MOBI_ASSET, prefix: :selling)
+          **asset_params(counter, prefix: :buying),
+          **asset_params(base, prefix: :selling)
       }
       client.get('order_book', **params).body
     end
+  end
+
+  def ask(counter, **options)
+    ticker(counter, **options).dig('asks', 0, 'price')
   end
 
   def account(address)
@@ -47,5 +52,9 @@ module StellarDEX
       code, issuer = MOBI_ASSET.split('-')
       client.get("assets", asset_code: code, asset_issuer: issuer).body['_embedded']['records'].first
     end
+  end
+
+  def name
+    'Stellar DEX'
   end
 end

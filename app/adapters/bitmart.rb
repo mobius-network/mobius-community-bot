@@ -18,4 +18,12 @@ module Bitmart
       client.get("ticker/#{pair}/").body
     end
   end
+
+  def ask(counter, **options)
+    ticker(counter, **options).dig('ask_1')
+  end
+
+  def name
+    'bitmart.com'
+  end
 end

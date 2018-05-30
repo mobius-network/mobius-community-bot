@@ -1,5 +1,5 @@
-module Gopax
-  API_ENDPOINT = 'https://api.gopax.co.kr'
+module Kucoin
+  API_ENDPOINT = 'https://api.kucoin.com/v1'.freeze
 
   module_function
 
@@ -14,16 +14,16 @@ module Gopax
 
   def ticker(counter, base: :mobi)
     pair = "#{base}-#{counter}".upcase
-    Rails.cache.fetch([:gopax, :ticker, pair], expires_in: 1.minute) do
-      client.get("/trading-pairs/#{pair}/ticker/").body
+    Rails.cache.fetch([:kucoin, :ticker, pair], expires_in: 2.minutes) do
+      client.get('open/orders-sell', symbol: pair, limit: 1).body.dig('data')
     end
   end
 
   def ask(counter, **options)
-    ticker(counter, **options).dig('ask')
+    ticker(counter, **options).dig(0, 0)
   end
 
   def name
-    'gopax.co.kr'
+    'kucoin.com'
   end
 end

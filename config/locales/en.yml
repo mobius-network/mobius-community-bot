@@ -8,7 +8,7 @@ en:
     start:
       hi: Hi there!
   telegram_vote_ban:
-    message: '@%{initiator} started voting to mute @%{user_to_ban}'
+    message: '%{initiator} started voting to mute %{user_to_ban}'
     cannot_ban_residents: 'User @%{user_to_ban} is a resident, you cannot mute them'
     cannot_ban_admin: 'User @%{user_to_ban} is an admin, you cannot mute them'
     vote_results:

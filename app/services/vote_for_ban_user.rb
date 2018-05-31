@@ -9,13 +9,13 @@ class VoteForBanUser
 
   # @param <User> user_to_ban
   # @param <Telegram::Bot::Types::User> voter
-  def self.call(chat_id:, user_to_ban:, voter:, vote: :for)
+  def self.call(chat_id:, user_to_ban_id:, voter:, vote: :for)
     with(
       chat_id: chat_id,
-      user_to_ban: user_to_ban,
+      user_to_ban_id: user_to_ban_id,
       voter: voter,
       vote: vote.to_sym,
-      votes_storage: VotesStorage.new(user_to_ban.telegram_id),
+      votes_storage: VotesStorage.new(user_to_ban_id),
     )
       .reduce(
         IncrementVotesCountAction,

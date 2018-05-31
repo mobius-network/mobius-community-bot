@@ -1,13 +1,13 @@
 class ResolveVotingAction
   extend LightService::Action
 
-  expects :chat_id, :user_to_ban, :for_count, :against_count
+  expects :chat_id, :user_to_ban_id, :for_count, :against_count
   promises :result
 
   executed do |ctx|
     resolution =
       if ctx.for_count >= VoteForBanUser.ban_votes_threshold
-        ban(ctx.chat_id, ctx.user_to_ban) ? :banned : :errored
+        ban(ctx.chat_id, ctx.user_to_ban_id) ? :banned : :errored
       elsif ctx.against_count >= VoteForBanUser.save_votes_threshold
         :saved
       else
@@ -27,10 +27,10 @@ class ResolveVotingAction
     }
   end
 
-  def self.ban(chat_id, user)
+  def self.ban(chat_id, user_id)
     Telegram.bot.restrict_chat_member(
       chat_id: chat_id,
-      user_id: user.telegram_id,
+      user_id: user_id,
       can_send_messages: false,
       can_send_media_messages: false,
       can_send_other_messages: false,

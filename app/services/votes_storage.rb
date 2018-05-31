@@ -24,10 +24,19 @@ class VotesStorage
   def clear
     redis.del(key_for)
     redis.del(key_against)
+    redis.del(messages_key)
   end
 
   def voting_is_ongoing?
     redis.exists(key_for) || redis.exists(key_against)
+  end
+
+  def voting_message_id=(message_id)
+    redis.hset(messages_key, @user_to_ban_id, message_id)
+  end
+
+  def voting_message_id
+    redis.hget(messages_key, @user_to_ban_id)
   end
 
   private
@@ -46,5 +55,9 @@ class VotesStorage
 
   def key(vote)
     "ban_voters:#{vote}:#{@user_to_ban_id}"
+  end
+
+  def messages_key
+    "ban_vote:message_id"
   end
 end

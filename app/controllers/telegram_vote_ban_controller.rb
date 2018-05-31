@@ -27,22 +27,22 @@ class TelegramVoteBanController < Telegram::Bot::UpdatesController
     reply_with(:message, text: t(reply, user: username))
   end
 
-  def ban(*)
-    user_to_ban = payload.reply_to_message.from
+  def ban(username = nil, *)
+    votes_storage = VotesStorage.new(user_to_ban.telegram_id)
 
-    if User.residents.exists?(telegram_id: user_to_ban.id)
-      return respond_with(
-        :message,
-        text: t(".cannot_ban_residents", user_to_ban: user_to_ban.username || user_to_ban.id),
-      )
-    end
+    # if user_to_ban.is_resident?
+    #   return respond_with(
+    #     :message,
+    #     text: t(".cannot_ban_residents", user_to_ban: user_to_ban.display_name),
+    #   )
+    # end
 
-    if user_is_admin_or_creator?(user_to_ban)
-      return respond_with(
-        :message,
-        text: t(".cannot_ban_admin", user_to_ban: user_to_ban.username || user_to_ban.id),
-      )
-    end
+    # if user_is_admin_or_creator?(user_to_ban.telegram_id)
+    #   return respond_with(
+    #     :message,
+    #     text: t(".cannot_ban_admin", user_to_ban: user_to_ban.display_name),
+    #   )
+    # end
 
     context = VoteForBanUser.call(
       chat_id: chat.id,
@@ -54,21 +54,22 @@ class TelegramVoteBanController < Telegram::Bot::UpdatesController
     message = t(
       ".message",
       initiator: from.username,
-      user_to_ban: user_to_ban.username || user_to_ban.id,
+      user_to_ban: user_to_ban.display_name,
     )
 
     response = respond_with(
       :message,
       text: message,
-      reply_to_message_id: payload.reply_to_message.message_id,
+      reply_to_message_id: payload.reply_to_message&.message_id,
       reply_markup: vote_buttons_markup(context.result)
     )
 
+    votes_storage.voting_message_id = response.dig("result", "message_id")
+
     ExpireBanVotingJob.perform_in(
       ENV["VOTE_DURATION"]&.to_i || 15 * 60,
-      VotesStorage.new(user_to_ban.id),
-      chat.id,
-      response.dig("result", "message_id"),
+      votes_storage,
+      chat.id
     )
   end
 
@@ -104,8 +105,8 @@ class TelegramVoteBanController < Telegram::Bot::UpdatesController
 
   private
 
-  def user_is_admin_or_creator?(user)
-    UserInfo.new(user.id).status(chat.id).in?(%w[administrator creator])
+  def user_is_admin_or_creator?(user_id)
+    UserInfo.new(user_id).status(chat.id).in?(%w[administrator creator])
   end
 
   def require_admin_or_creator
@@ -134,5 +135,14 @@ class TelegramVoteBanController < Telegram::Bot::UpdatesController
         ]
       ]
     }
+  end
+
+  def user_to_ban
+    @user_to_ban ||=
+      if payload.reply_to_message
+        User.find_by_telegram_id(payload.reply_to_message.from.id)
+      else
+        ExtractUserFromArgs.call(payload)
+      end
   end
 end

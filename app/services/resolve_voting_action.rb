@@ -30,7 +30,7 @@ class ResolveVotingAction
   def self.ban(chat_id, user)
     Telegram.bot.restrict_chat_member(
       chat_id: chat_id,
-      user_id: user.id,
+      user_id: user.telegram_id,
       can_send_messages: false,
       can_send_media_messages: false,
       can_send_other_messages: false,

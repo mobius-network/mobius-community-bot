@@ -30,19 +30,19 @@ class TelegramVoteBanController < Telegram::Bot::UpdatesController
   def ban(username = nil, *)
     votes_storage = VotesStorage.new(user_to_ban.telegram_id)
 
-    # if user_to_ban.is_resident?
-    #   return respond_with(
-    #     :message,
-    #     text: t(".cannot_ban_residents", user_to_ban: user_to_ban.display_name),
-    #   )
-    # end
+    if user_to_ban.is_resident?
+      return respond_with(
+        :message,
+        text: t(".cannot_ban_residents", user_to_ban: user_to_ban.display_name),
+      )
+    end
 
-    # if user_is_admin_or_creator?(user_to_ban.telegram_id)
-    #   return respond_with(
-    #     :message,
-    #     text: t(".cannot_ban_admin", user_to_ban: user_to_ban.display_name),
-    #   )
-    # end
+    if user_is_admin_or_creator?(user_to_ban.telegram_id)
+      return respond_with(
+        :message,
+        text: t(".cannot_ban_admin", user_to_ban: user_to_ban.display_name),
+      )
+    end
 
     context = VoteForBanUser.call(
       chat_id: chat.id,

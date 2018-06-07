@@ -2,7 +2,7 @@ class VoteForBanUser
   extend LightService::Organizer
 
   after_actions (->(ctx) {
-    if ctx.current_action == ResolveVotingAction && ctx.result != :continue
+    if ctx.current_action == ResolveVotingAction && ctx.result.resolution != :continue
       ctx.votes_storage.clear
     end
   })

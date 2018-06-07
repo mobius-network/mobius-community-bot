@@ -4,17 +4,19 @@ en:
       failures:
         wrong_option: 'Wrong voting option'
         already_voted: 'You already voted'
+        cannot_vote_for_yourself: "You cannot vote for yourself"
   telegram_webhook:
     start:
       hi: Hi there!
   telegram_vote_ban:
     message: '%{initiator} started voting to mute %{user_to_ban}'
-    cannot_ban_residents: 'User @%{user_to_ban} is a resident, you cannot mute them'
-    cannot_ban_admin: 'User @%{user_to_ban} is an admin, you cannot mute them'
+    voting_is_ongoing: 'Voting is already ongoing, go to %{link} to see results. Your vote is accepted'
+    cannot_ban_residents: 'User %{user_to_ban} is a resident, you cannot mute them'
+    cannot_ban_admin: 'User %{user_to_ban} is an admin, you cannot mute them'
     vote_results:
       continue: 'Your vote was accepted'
-      banned: 'User @%{user_to_ban} was muted'
-      saved: 'User @%{user_to_ban} was saved from muting'
+      banned: 'User %{user_to_ban} was muted. Users, that decided so: %{voters_for}'
+      saved: 'User %{user_to_ban} was saved from muting. Users, that decided so: %{voters_against}'
     promote:
       access_denied: "Only group administrator can do that"
       use_only_in_group: "This command cannot be invoke in private chat. Use it in group"

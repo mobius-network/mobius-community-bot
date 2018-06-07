@@ -51,6 +51,13 @@ class TelegramVoteBanController < Telegram::Bot::UpdatesController
       )
     end
 
+    if votes_storage.voting_is_ongoing?
+      return respond_with(
+        :message,
+        text: t(".voting_is_ongoing", link: "t.me/#{chat.username}/#{votes_storage.voting_message_id}")
+      )
+    end
+
     context = VoteForBanUser.call(
       chat_id: chat.id,
       user_to_ban_id: user_to_ban.telegram_id,
@@ -58,9 +65,21 @@ class TelegramVoteBanController < Telegram::Bot::UpdatesController
       vote: VotesStorage::VOTE_FOR
     )
 
+    # if user is a resident, it can ban instantly, so there will be no need
+    # showing buttons for voting, so it's a shortcut
+    if context.result.resolution != :continue
+      message = t(
+        "telegram_vote_ban.vote_results.#{context.result.resolution}",
+        user_to_ban: user_to_ban.display_name,
+        voters_for: context.result.voters_for.map(&:display_name).join(", "),
+        voters_against: context.result.voters_against.map(&:display_name).join(", ")
+      )
+      return respond_with(:message, text: message)
+    end
+
     message = t(
       ".message",
-      initiator: from.username,
+      initiator: User.find_by_telegram_id(from.id).display_name,
       user_to_ban: user_to_ban.display_name,
     )
 
@@ -81,7 +100,10 @@ class TelegramVoteBanController < Telegram::Bot::UpdatesController
   end
 
   def vote_callback_query(data)
+    return if UserInfo.new(payload.from.id).status(payload.message.chat.id) == "restricted"
+
     vote, user_to_ban_id = data.split(":")
+
     user_to_ban = User.find_by_telegram_id(user_to_ban_id)
 
     context = VoteForBanUser.call(
@@ -95,12 +117,14 @@ class TelegramVoteBanController < Telegram::Bot::UpdatesController
 
     result = context.result
 
-    message = t(
-      "telegram_vote_ban.vote_results.#{result.resolution}",
-      user_to_ban: user_to_ban.display_name
-    )
-
     if result.resolution != :continue
+      message = t(
+        "telegram_vote_ban.vote_results.#{result.resolution}",
+        user_to_ban: user_to_ban.display_name,
+        voters_for: result.voters_for.map(&:display_name).join(", "),
+        voters_against: result.voters_against.map(&:display_name).join(", ")
+      )
+
       edit_message(:text, text: message)
     else
       edit_message(

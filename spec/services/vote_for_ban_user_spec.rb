@@ -8,7 +8,7 @@ RSpec.describe VoteForBanUser do
   let(:service_params) do
     {
       chat_id: chat_id,
-      user_to_ban: user_to_ban,
+      user_to_ban_id: user_to_ban.id,
       voter: voter,
       vote: vote,
     }
@@ -21,7 +21,7 @@ RSpec.describe VoteForBanUser do
         it "returns :continue result" do
           ctx = described_class.call(**service_params)
 
-          expect(ctx.result).to eq(:continue)
+          expect(ctx.result.resolution).to eq(:continue)
         end
       end
 
@@ -30,7 +30,7 @@ RSpec.describe VoteForBanUser do
           (described_class.ban_votes_threshold - 1).times do |i|
             described_class.call(
               chat_id: chat_id,
-              user_to_ban: user_to_ban,
+              user_to_ban_id: user_to_ban.id,
               voter: Telegram::Bot::Types::User.new(id: 500 + i),
               vote: :for,
             )
@@ -54,7 +54,7 @@ RSpec.describe VoteForBanUser do
               can_send_media_messages: false,
               can_send_other_messages: false,
             )
-          expect(ctx.result).to eq(:banned)
+          expect(ctx.result.resolution).to eq(:banned)
         end
       end
     end
@@ -66,7 +66,7 @@ RSpec.describe VoteForBanUser do
         it "returns :continue result" do
           ctx = described_class.call(**service_params)
 
-          expect(ctx.result).to eq(:continue)
+          expect(ctx.result.resolution).to eq(:continue)
         end
       end
 
@@ -75,7 +75,7 @@ RSpec.describe VoteForBanUser do
           (described_class.save_votes_threshold - 1).times do |i|
             described_class.call(
               chat_id: chat_id,
-              user_to_ban: user_to_ban,
+              user_to_ban_id: user_to_ban.id,
               voter: Telegram::Bot::Types::User.new(id: 500 + i),
               vote: :against,
             )
@@ -85,7 +85,7 @@ RSpec.describe VoteForBanUser do
         it "saves user" do
           ctx = described_class.call(**service_params)
 
-          expect(ctx.result).to eq(:saved)
+          expect(ctx.result.resolution).to eq(:saved)
         end
       end
     end

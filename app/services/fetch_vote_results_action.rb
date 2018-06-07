@@ -11,7 +11,7 @@ class FetchVoteResultsAction
     ctx.for_voters = for_voters.map(&instantiator)
     ctx.against_voters = against_voters.map(&instantiator)
 
-    totalizer = proc { |u| u.is_resident? ? resident_weight : 1 }
+    totalizer = proc { |u| u&.is_resident? ? resident_weight : 1 }
     ctx.for_count = ctx.for_voters.sum(&totalizer)
     ctx.against_count = ctx.against_voters.sum(&totalizer)
   end

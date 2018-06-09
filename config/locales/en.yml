@@ -11,12 +11,13 @@ en:
     start:
       hi: Hi there!
   telegram_vote_ban:
-    message: %{initiator} would like to ban %{target}. Do you agree?
-    cannot_ban_residents: User %{target} is a resident, you cannot ban them.
-    cannot_ban_admin: User %{target} is an admin, you cannot ban them.
+    message: "%{initiator} would like to ban %{target}. Do you agree?"
+    cannot_ban_residents: "User %{target} is a resident, you cannot ban them."
+    cannot_ban_admin: "User %{target} is an admin, you cannot ban them."
     vote_results:
       continue: Your vote was counted
-      ongoing: Your vote was counted, check %{link} to see the results.
+      ongoing: |-
+        Your vote was counted, check %{link} to see the results.
       banned: |-
         ⛔ %{target} has been banned.
 
@@ -31,11 +32,11 @@ en:
       access_denied: Only group administrator can do that
       use_only_in_group: This command cannot be invoke in private chat. Use it in group
       username_is_missing: Please, provide username `/promote <username>`
-      promoted: %{user} has been successfully promoted to residents!
-      already_promoted: %{user} has already been promoted.
+      promoted: "%{user} has been successfully promoted to residents!"
+      already_promoted: "%{user} has already been promoted."
     demote:
       access_denied: Only group administrator can do that
       use_only_in_group: This command cannot be invoke in private chat. Use it in group
       username_is_missing: Please, provide username `/demote <username>`
-      demoted: %{user} has been successfully demoted from residents!
-      was_not_promoted: %{user} has not been promoted yet!
+      demoted: "%{user} has been successfully demoted from residents!"
+      was_not_promoted: "%{user} has not been promoted yet!"

@@ -2,32 +2,40 @@ en:
   increment_votes_count_action:
     light_service:
       failures:
-        wrong_option: 'Wrong voting option'
-        already_voted: 'You already voted'
-        cannot_vote_for_yourself: "You cannot vote for yourself"
+        wrong_option: Wrong voting option
+        already_voted: You already voted
+        cannot_vote_for_yourself: You cannot vote for yourself
+  jobs:
+    voting_expired: Voting is expired
   telegram_webhook:
     start:
       hi: Hi there!
   telegram_vote_ban:
-    message: '%{initiator} would like to ban %{target}. Do you agree?'
-    cannot_ban_residents: 'User %{target} is a resident, you cannot ban them'
-    cannot_ban_admin: 'User %{target} is an admin, you cannot ban them'
+    message: %{initiator} would like to ban %{target}. Do you agree?
+    cannot_ban_residents: User %{target} is a resident, you cannot ban them.
+    cannot_ban_admin: User %{target} is an admin, you cannot ban them.
     vote_results:
-      continue: 'Your vote was counted'
-      ongoing: 'Your vote was counted, check %{link} to see the results.'
-      banned: '⛔ %{target} has been banned.\n\nVoters who chose to ban:\n%{voters_for}.'
-      saved: '👼 %{target} has been saved — no ban for you this time.\n\nYour guardian angels are:\n%{voters_against}'
+      continue: Your vote was counted
+      ongoing: Your vote was counted, check %{link} to see the results.
+      banned: |-
+        ⛔ %{target} has been banned.
+
+        Voters who chose to ban:
+        %{voters_for}
+      saved: |-
+        👼 %{target} has been saved — no ban for you this time.
+
+        Your guardian angels are:
+        %{voters_against}
     promote:
-      access_denied: "Only group administrator can do that"
-      use_only_in_group: "This command cannot be invoke in private chat. Use it in group"
-      username_is_missing: "Please, provide username `/promote <username>`"
-      promoted: "%{user} has been successfully promoted!"
-      already_promoted: "%{user} has already been promoted."
+      access_denied: Only group administrator can do that
+      use_only_in_group: This command cannot be invoke in private chat. Use it in group
+      username_is_missing: Please, provide username `/promote <username>`
+      promoted: %{user} has been successfully promoted to residents!
+      already_promoted: %{user} has already been promoted.
     demote:
-      access_denied: "Only group administrator can do that"
-      use_only_in_group: "This command cannot be invoke in private chat. Use it in group"
-      username_is_missing: "Please, provide username `/demote <username>`"
-      demoted: "%{user} was successfully demoted!"
-      was_not_promoted: "%{user} wasn't promoted"
-  jobs:
-    voting_expired: 'Voting is expired'
+      access_denied: Only group administrator can do that
+      use_only_in_group: This command cannot be invoke in private chat. Use it in group
+      username_is_missing: Please, provide username `/demote <username>`
+      demoted: %{user} has been successfully demoted from residents!
+      was_not_promoted: %{user} has not been promoted yet!

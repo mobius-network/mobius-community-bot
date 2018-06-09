@@ -30,7 +30,7 @@ class TelegramVoteBanController < Telegram::Bot::UpdatesController
   def ban(*)
     user_to_ban =
       if payload.reply_to_message
-        User.find_by_telegram_id(payload.reply_to_message.from.id)
+        User.find_or_create(payload.reply_to_message.from)
       else
         ExtractUserFromArgs.call(payload)
       end

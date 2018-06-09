@@ -40,21 +40,21 @@ class TelegramVoteBanController < Telegram::Bot::UpdatesController
     if user_to_ban.is_resident?
       return respond_with(
         :message,
-        text: t(".cannot_ban_residents", user_to_ban: user_to_ban.display_name),
+        text: t(".cannot_ban_residents", target: user_to_ban.display_name),
       )
     end
 
     if user_is_admin_or_creator?(user_to_ban.telegram_id)
       return respond_with(
         :message,
-        text: t(".cannot_ban_admin", user_to_ban: user_to_ban.display_name),
+        text: t(".cannot_ban_admin", target: user_to_ban.display_name),
       )
     end
 
     if votes_storage.voting_is_ongoing?
       return respond_with(
         :message,
-        text: t(".voting_is_ongoing", link: "t.me/#{chat.username}/#{votes_storage.voting_message_id}")
+        text: t(".vote_results.ongoing", link: "t.me/#{chat.username}/#{votes_storage.voting_message_id}")
       )
     end
 
@@ -69,8 +69,8 @@ class TelegramVoteBanController < Telegram::Bot::UpdatesController
     # showing buttons for voting, so it's a shortcut
     if context.result.resolution != :continue
       message = t(
-        "telegram_vote_ban.vote_results.#{context.result.resolution}",
-        user_to_ban: user_to_ban.display_name,
+        ".vote_results.#{context.result.resolution}",
+        target: user_to_ban.display_name,
         voters_for: context.result.voters_for.map(&:display_name).join(", "),
         voters_against: context.result.voters_against.map(&:display_name).join(", ")
       )
@@ -80,7 +80,7 @@ class TelegramVoteBanController < Telegram::Bot::UpdatesController
     message = t(
       ".message",
       initiator: User.find_by_telegram_id(from.id).display_name,
-      user_to_ban: user_to_ban.display_name,
+      target: user_to_ban.display_name,
     )
 
     response = respond_with(
@@ -120,7 +120,7 @@ class TelegramVoteBanController < Telegram::Bot::UpdatesController
     if result.resolution != :continue
       message = t(
         "telegram_vote_ban.vote_results.#{result.resolution}",
-        user_to_ban: user_to_ban.display_name,
+        target: user_to_ban.display_name,
         voters_for: result.voters_for.map(&:display_name).join(", "),
         voters_against: result.voters_against.map(&:display_name).join(", ")
       )

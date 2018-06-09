@@ -9,20 +9,20 @@ en:
     start:
       hi: Hi there!
   telegram_vote_ban:
-    message: '%{initiator} started voting to mute %{user_to_ban}'
-    voting_is_ongoing: 'Voting is already ongoing, go to %{link} to see results. Your vote is accepted'
-    cannot_ban_residents: 'User %{user_to_ban} is a resident, you cannot mute them'
-    cannot_ban_admin: 'User %{user_to_ban} is an admin, you cannot mute them'
+    message: '%{initiator} would like to ban %{target}. Do you agree?'
+    cannot_ban_residents: 'User %{target} is a resident, you cannot ban them'
+    cannot_ban_admin: 'User %{target} is an admin, you cannot ban them'
     vote_results:
-      continue: 'Your vote was accepted'
-      banned: 'User %{user_to_ban} was muted. Users, that decided so: %{voters_for}'
-      saved: 'User %{user_to_ban} was saved from muting. Users, that decided so: %{voters_against}'
+      continue: 'Your vote was counted'
+      ongoing: 'Your vote was counted, check %{link} to see the results.'
+      banned: '⛔ %{target} has been banned.\n\nVoters who chose to ban:\n%{voters_for}.'
+      saved: '👼 %{target} has been saved — no ban for you this time.\n\nYour guardian angels are:\n%{voters_against}'
     promote:
       access_denied: "Only group administrator can do that"
       use_only_in_group: "This command cannot be invoke in private chat. Use it in group"
       username_is_missing: "Please, provide username `/promote <username>`"
-      promoted: "%{user} was successfully promoted!"
-      already_promoted: "%{user} had been already promoted"
+      promoted: "%{user} has been successfully promoted!"
+      already_promoted: "%{user} has already been promoted."
     demote:
       access_denied: "Only group administrator can do that"
       use_only_in_group: "This command cannot be invoke in private chat. Use it in group"

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'faraday_middleware'
 
 class TelegramPricesController < TelegramWebhookController
@@ -85,4 +87,5 @@ class TelegramPricesController < TelegramWebhookController
     eth: [GateIO, Kucoin, Stronghold, Bitmart, OtcBtc],
     krw: [Gopax],
     fiat: [:usdt, :krw],
-  }end
+  }
+end

@@ -75,7 +75,6 @@ class TelegramVoteBanController < Telegram::Bot::UpdatesController
         voters_against: context.result.voters_against.map(&:display_name).join(", ")
       )
 
-      binding.pry
       if context.result.resolution == :banned && payload.reply_to_message
         bot.delete_message(chat_id: chat.id, message_id: payload.reply_to_message.message_id)
       end

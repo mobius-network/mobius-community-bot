@@ -74,6 +74,12 @@ class TelegramVoteBanController < Telegram::Bot::UpdatesController
         voters_for: context.result.voters_for.map(&:display_name).join(", "),
         voters_against: context.result.voters_against.map(&:display_name).join(", ")
       )
+
+      binding.pry
+      if context.result.resolution == :banned && payload.reply_to_message
+        bot.delete_message(chat_id: chat.id, message_id: payload.reply_to_message.message_id)
+      end
+
       return respond_with(:message, text: message)
     end
 
@@ -124,6 +130,10 @@ class TelegramVoteBanController < Telegram::Bot::UpdatesController
         voters_for: result.voters_for.map(&:display_name).join(", "),
         voters_against: result.voters_against.map(&:display_name).join(", ")
       )
+
+      if result.resolution == :banned && payload.reply_to_message
+        bot.delete_message(chat_id: chat.id, message_id: payload.reply_to_message.message_id)
+      end
 
       edit_message(:text, text: message)
     else

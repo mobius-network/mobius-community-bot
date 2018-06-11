@@ -35,6 +35,9 @@ class TelegramVoteBanController < Telegram::Bot::UpdatesController
         ExtractUserFromArgs.call(payload)
       end
 
+    # TODO: as a quickfix for now just ignore a request to ban unknown user
+    return unless user_to_ban.telegram_id
+
     votes_storage = VotesStorage.new(user_to_ban.telegram_id)
 
     if user_to_ban.is_resident?
@@ -147,7 +150,7 @@ class TelegramVoteBanController < Telegram::Bot::UpdatesController
   private
 
   def user_is_admin_or_creator?(user_id)
-    UserInfo.new(user_id).status(chat.id).in?(%w[administrator creator])
+    user_id.present? && UserInfo.new(user_id).status(chat.id).in?(%w[administrator creator])
   end
 
   def require_admin_or_creator

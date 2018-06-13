@@ -1,4 +1,5 @@
 class ExtractUserFromArgs
+  class MissingMentionError < StandardError; end
   class InvalidMentionError < StandardError; end
 
   def initialize(payload)
@@ -12,6 +13,7 @@ class ExtractUserFromArgs
   end
 
   def call
+    raise MissingMentionError, missing_mention_error_message if argument_value.nil?
     User.find_or_initialize_by(user_search_criteria)
   end
 
@@ -34,7 +36,7 @@ class ExtractUserFromArgs
   end
 
   def argument_value
-    @payload.text.split(" ")[1].sub(/^@/, "")
+    @payload.text.split(" ")[1]&.sub(/^@/, "")
   end
 
   def invalid_mention_error_message
@@ -43,5 +45,9 @@ class ExtractUserFromArgs
       mention: argument_value,
       scope: :telegram_vote_ban
     )
+  end
+
+  def missing_mention_error_message
+    I18n.t(:missing_ban_mention, scope: :telegram_vote_ban)
   end
 end

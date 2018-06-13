@@ -105,7 +105,7 @@ class TelegramVoteBanController < Telegram::Bot::UpdatesController
       votes_storage,
       chat.id
     )
-  rescue ExtractUserFromArgs::InvalidMentionError => e
+  rescue ExtractUserFromArgs::InvalidMentionError, ExtractUserFromArgs::MissingMentionError => e
     reply_with(:message, text: e.message)
   end
 

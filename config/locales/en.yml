@@ -14,6 +14,7 @@ en:
     message: "%{initiator} would like to ban %{target}. Do you agree?"
     cannot_ban_residents: "User %{target} is a resident, you cannot ban them."
     cannot_ban_admin: "User %{target} is an admin, you cannot ban them."
+    invalid_ban_mention: "Unknown mention '%{mention}'. Please, use @ for mention (even if user doesn't have username)"
     vote_results:
       continue: Your vote was counted
       ongoing: |-

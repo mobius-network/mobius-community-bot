@@ -1,4 +1,6 @@
 class ExtractUserFromArgs
+  class InvalidMentionError < StandardError; end
+
   def initialize(payload)
     @payload = payload
   end
@@ -25,14 +27,21 @@ class ExtractUserFromArgs
 
   def argument
     entity = @payload.entities.second
-    OpenStruct.new(
-      type: entity.type,
-      user: entity.user,
-      value: argument_value
-    )
+
+    raise InvalidMentionError, invalid_mention_error_message if entity.nil?
+
+    OpenStruct.new(type: entity.type, user: entity.user, value: argument_value)
   end
 
   def argument_value
     @payload.text.split(" ")[1].sub(/^@/, "")
+  end
+
+  def invalid_mention_error_message
+    I18n.t(
+      :invalid_ban_mention,
+      mention: argument_value,
+      scope: :telegram_vote_ban
+    )
   end
 end

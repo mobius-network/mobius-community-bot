@@ -136,7 +136,10 @@ class TelegramVoteBanController < Telegram::Bot::UpdatesController
       )
 
       if result.resolution == :banned && payload.reply_to_message
-        bot.delete_message(chat_id: chat.id, message_id: payload.reply_to_message.message_id)
+        bot.delete_message(
+          chat_id: payload.message.chat.id,
+          message_id: payload.message.reply_to_message.message_id
+        )
       end
 
       edit_message(:text, text: message)

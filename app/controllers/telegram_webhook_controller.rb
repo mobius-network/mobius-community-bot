@@ -5,6 +5,7 @@ class TelegramWebhookController < Telegram::Bot::UpdatesController
   use_session!
 
   before_action :store_sender
+  before_action :mute_invitees
 
   def start!(*)
     respond_with :message, text: t('.hi')
@@ -37,5 +38,20 @@ class TelegramWebhookController < Telegram::Bot::UpdatesController
       first_name: user.first_name,
       last_name: user.last_name
     )
+  end
+
+  def mute_invitees
+    return unless payload.is_a?(Telegram::Bot::Types::Message)
+    payload.new_chat_members.each do |user|
+      Telegram.bot.restrict_chat_member(
+        chat_id: chat.id,
+        user_id: user.id,
+        until_date: 1.day.from_now.to_i,
+        can_send_messages: true,
+        can_send_media_messages: false,
+        can_send_other_messages: false,
+        can_add_web_page_previews: false,
+      )
+    end
   end
 end

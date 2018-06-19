@@ -38,6 +38,9 @@ class TelegramVoteBanController < Telegram::Bot::UpdatesController
 
     votes_storage = VotesStorage.new(user_to_ban.telegram_id)
 
+    # Delete the vote initiating '/ban' message
+    bot.delete_message(chat_id: chat.id, message_id: payload.message_id)
+
     if user_to_ban.is_resident?
       return respond_with(
         :message,
@@ -62,7 +65,7 @@ class TelegramVoteBanController < Telegram::Bot::UpdatesController
     context = VoteForBanUser.call(
       chat_id: chat.id,
       user_to_ban_id: user_to_ban.telegram_id,
-      voter: payload.from,
+      voter: from,
       vote: VotesStorage::VOTE_FOR
     )
 
@@ -108,16 +111,16 @@ class TelegramVoteBanController < Telegram::Bot::UpdatesController
   end
 
   def vote_callback_query(data)
-    return if UserInfo.new(payload.from.id).status(payload.message.chat.id) == "restricted"
+    return if UserInfo.new(from.id).status(chat.id) == "restricted"
 
     vote, user_to_ban_id = data.split(":")
 
     user_to_ban = User.find_by_telegram_id(user_to_ban_id)
 
     context = VoteForBanUser.call(
-      chat_id: payload.message.chat.id,
+      chat_id: chat.id,
       user_to_ban_id: user_to_ban_id,
-      voter: payload.from,
+      voter: from,
       vote: vote
     )
 
@@ -133,11 +136,9 @@ class TelegramVoteBanController < Telegram::Bot::UpdatesController
         voters_against: result.voters_against.map(&:display_name).join(", ")
       )
 
-      if result.resolution == :banned && payload.reply_to_message
-        bot.delete_message(
-          chat_id: payload.message.chat.id,
-          message_id: payload.message.reply_to_message.message_id
-        )
+      offending_msg = payload.message.reply_to_message
+      if result.resolution == :banned && offending_msg
+        bot.delete_message(chat_id: chat.id, message_id: offending_msg.message_id)
       end
 
       edit_message(:text, text: message)
@@ -160,6 +161,17 @@ class TelegramVoteBanController < Telegram::Bot::UpdatesController
   rescue Telegram::Bot::Error => e
     raise unless e.message.include?('QUERY_ID_INVALID')
     logger.info {"Ignoring telegram error: #{e.message}"}
+  end
+
+  # Telegram requires answer to any callback query, so if you just edit
+  # the message user will still see spinner in the callback button.
+  # This module makes #edit_message automatically answers callback queries
+  # with same text.
+  def edit_message(type, params = {})
+    super
+    if type == :text && params[:text] && payload_type == 'callback_query'
+      answer_callback_query params[:text]
+    end
   end
 
   def user_is_admin_or_creator?(user_id)

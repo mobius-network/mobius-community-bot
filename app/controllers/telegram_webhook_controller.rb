@@ -1,11 +1,9 @@
 class TelegramWebhookController < Telegram::Bot::UpdatesController
   include Telegram::Bot::UpdatesController::TypedUpdate
-  include Telegram::Bot::Botan::ControllerHelpers
   include Telegram::Bot::UpdatesController::CallbackQueryContext
 
   use_session!
 
-  before_action :botan_track_action
   before_action :store_sender
 
   def start(*)

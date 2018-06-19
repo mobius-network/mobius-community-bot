@@ -1,11 +1,9 @@
 class TelegramVoteBanController < Telegram::Bot::UpdatesController
   include Telegram::Bot::UpdatesController::TypedUpdate
-  include Telegram::Bot::Botan::ControllerHelpers
   include Telegram::Bot::UpdatesController::CallbackQueryContext
 
   use_session!
 
-  before_action :botan_track_action
   before_action :require_group_chat, only: %i[promote demote]
   before_action :require_admin_or_creator, only: %i[promote demote]
 

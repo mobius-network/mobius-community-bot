@@ -16,7 +16,7 @@ gem 'pg', '~> 1.0'
 gem 'puma', '~> 3.7'
 gem 'stellar-sdk', github: 'stellar/ruby-stellar-sdk'
 gem 'sucker_punch', '~> 2.0'
-gem 'telegram-bot', '~> 0.13'
+gem 'telegram-bot', '~> 0.14'
 gem 'telegram-bot-types', '~> 0.5'
 
 group :development do

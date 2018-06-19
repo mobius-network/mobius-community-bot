@@ -6,7 +6,7 @@ class TelegramWebhookController < Telegram::Bot::UpdatesController
 
   before_action :store_sender
 
-  def start(*)
+  def start!(*)
     respond_with :message, text: t('.hi')
   end
 

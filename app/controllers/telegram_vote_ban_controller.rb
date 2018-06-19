@@ -7,7 +7,7 @@ class TelegramVoteBanController < Telegram::Bot::UpdatesController
   before_action :require_group_chat, only: %i[promote demote]
   before_action :require_admin_or_creator, only: %i[promote demote]
 
-  def promote(username = nil, *)
+  def promote!(username = nil, *)
     return reply_with(:message, text: t(".username_is_missing")) if username.nil?
 
     was_promoted = ChangeResidentStatus.promote(payload)
@@ -16,7 +16,7 @@ class TelegramVoteBanController < Telegram::Bot::UpdatesController
     reply_with(:message, text: t(reply, user: username))
   end
 
-  def demote(username = nil, *)
+  def demote!(username = nil, *)
     return reply_with(:message, text: t(".username_is_missing")) if username.nil?
 
     was_demoted = ChangeResidentStatus.demote(payload)
@@ -25,7 +25,7 @@ class TelegramVoteBanController < Telegram::Bot::UpdatesController
     reply_with(:message, text: t(reply, user: username))
   end
 
-  def ban(*)
+  def ban!(*)
     user_to_ban =
       if payload.reply_to_message
         User.find_or_create(payload.reply_to_message.from)
@@ -151,6 +151,16 @@ class TelegramVoteBanController < Telegram::Bot::UpdatesController
   end
 
   private
+
+  # Ignore errors that appears when user sends too much callback queries in a short
+  # time period. Seems like telegram drops first queries before app is able to
+  # answer them.
+  def answer_callback_query(*)
+    super
+  rescue Telegram::Bot::Error => e
+    raise unless e.message.include?('QUERY_ID_INVALID')
+    logger.info {"Ignoring telegram error: #{e.message}"}
+  end
 
   def user_is_admin_or_creator?(user_id)
     user_id.present? && UserInfo.new(user_id).status(chat.id).in?(%w[administrator creator])

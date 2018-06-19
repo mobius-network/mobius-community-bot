@@ -5,7 +5,7 @@ require 'faraday_middleware'
 class TelegramPricesController < TelegramWebhookController
   include ActionView::Helpers::NumberHelper
 
-  def price(currency = nil, *)
+  def price!(currency = nil, *)
     cmc_price = ->(symbol) { [CoinMarketCap, symbol] }
     cmc_prices = [:usd, :xlm, :btc, :eth].map(&cmc_price)
     text = cmc_prices.map { |(ticker, symbol)| "`#{format_quote(ticker.ask(symbol), symbol)}`"}.join(' = ')
@@ -24,13 +24,13 @@ class TelegramPricesController < TelegramWebhookController
     respond_with :message, text: text, parse_mode: 'Markdown', disable_notification: true
   end
 
-  def full_price(*)
+  def full_price!(*)
     respond_with :message, parse_mode: 'Markdown', disable_notification: true, text: <<-MSG.strip_heredoc
       `/full_price` command is replaced by `/price <asset>` (asset: fiat, xlm, btc or eth)
     MSG
   end
 
-  def supply(*)
+  def supply!(*)
     # 375,559,240.73 are in circulation
     #  - pending remaining pre-sale distributions of 56,906,663.47
     # 124,320,000.00 are locked until October 18, 2018
@@ -43,7 +43,7 @@ class TelegramPricesController < TelegramWebhookController
     MSG
   end
 
-  def onramps(*)
+  def onramps!(*)
     respond_with :message, text: <<-MSG.strip_heredoc, parse_mode: 'Markdown', disable_web_page_preview: true, disable_notification: true
       *Stellar DEX*
        ➛ [StellarTerm](https://stellarterm.com) (XLM)

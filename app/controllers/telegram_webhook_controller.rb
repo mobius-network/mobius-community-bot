@@ -42,6 +42,10 @@ class TelegramWebhookController < Telegram::Bot::UpdatesController
 
   def mute_invitees
     return unless payload.is_a?(Telegram::Bot::Types::Message)
+
+    # FIXME: temorary untill bot is an admin in Chinese other groups
+    return unless chat.username == 'mobius_network'
+
     payload.new_chat_members.each do |user|
       Telegram.bot.restrict_chat_member(
         chat_id: chat.id,

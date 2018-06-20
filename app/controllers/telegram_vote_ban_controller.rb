@@ -39,7 +39,9 @@ class TelegramVoteBanController < Telegram::Bot::UpdatesController
     votes_storage = VotesStorage.new(user_to_ban.telegram_id)
 
     # Delete the vote initiating '/ban' message
-    bot.delete_message(chat_id: chat.id, message_id: payload.message_id)
+    bot.async do
+      bot.delete_message(chat_id: chat.id, message_id: payload.message_id)
+    end
 
     if user_to_ban.is_resident?
       return respond_with(

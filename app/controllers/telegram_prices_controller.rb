@@ -11,7 +11,7 @@ class TelegramPricesController < TelegramWebhookController
     text = cmc_prices.map { |(ticker, symbol)| "`#{format_quote(ticker.ask(symbol), symbol)}`"}.join(' = ')
 
     if currency && currency.downcase.to_sym.in?(TICKERS.keys)
-      tickers = TICKERS[currency.to_sym].map do |ticker|
+      tickers = TICKERS[currency.downcase.to_sym].map do |ticker|
         if ticker.is_a?(Symbol)
           TICKERS[ticker].map {|tck| [tck, ticker]}
         else

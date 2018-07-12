@@ -15,7 +15,7 @@ class TelegramPricesController < TelegramWebhookController
         if ticker.is_a?(Symbol)
           TICKERS[ticker].map {|tck| [tck, ticker]}
         else
-          [[ticker, currency.to_sym]]
+          [[ticker, currency.downcase.to_sym]]
         end
       end.flatten(1)
       text += "\n\n#{tickers.map {|(ticker, symbol)| "➛ #{format_quote(ticker.ask(symbol), symbol)} @ #{ticker.name}"}.join("\n")}"

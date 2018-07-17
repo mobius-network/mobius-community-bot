@@ -8,7 +8,7 @@ class TelegramVoteBanController < Telegram::Bot::UpdatesController
   before_action :require_admin_or_creator, only: %i[promote demote]
 
   rescue_from(ExtractUserFromArgs::InvalidMentionError, ExtractUserFromArgs::MissingMentionError) do |e|
-    reply_with(:message, text: e.message)
+    reply_with(:message, text: e.message) rescue respond_with(:message, text: e.message)
   end
 
   def promote!(username = nil, *)

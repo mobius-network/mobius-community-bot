@@ -7,6 +7,10 @@ class TelegramVoteBanController < Telegram::Bot::UpdatesController
   before_action :require_group_chat, only: %i[promote demote]
   before_action :require_admin_or_creator, only: %i[promote demote]
 
+  rescue_from(ExtractUserFromArgs::InvalidMentionError, ExtractUserFromArgs::MissingMentionError) do |e|
+    reply_with(:message, text: e.message)
+  end
+
   def promote!(username = nil, *)
     return reply_with(:message, text: t(".username_is_missing")) if username.nil?
 
@@ -108,8 +112,6 @@ class TelegramVoteBanController < Telegram::Bot::UpdatesController
       votes_storage,
       chat.id
     )
-  rescue ExtractUserFromArgs::InvalidMentionError, ExtractUserFromArgs::MissingMentionError => e
-    reply_with(:message, text: e.message)
   end
 
   def vote_callback_query(data)

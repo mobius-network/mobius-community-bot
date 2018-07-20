@@ -38,6 +38,9 @@ class TelegramWebhookController < Telegram::Bot::UpdatesController
       first_name: user.first_name,
       last_name: user.last_name
     )
+  rescue ActiveRecord::RecordNotUnique
+    User.where(username: user.username).update_all(username: nil)
+    retry
   end
 
   def mute_invitees

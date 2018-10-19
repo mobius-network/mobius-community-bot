@@ -5,7 +5,7 @@ git_source(:github) { |repo_name| "https://github.com/#{repo_name}.git" }
 ruby '~> 2.5'
 
 gem 'dotenv-rails', require: 'dotenv/rails-now', groups: %i[development test]
-gem 'rails', '~> 5.1.4'
+gem 'rails', '~> 5.2.1'
 
 gem 'bigdecimal'
 gem 'dry-initializer', '~> 2.4'
@@ -14,7 +14,7 @@ gem 'light-service', '~> 0.10.3'
 gem 'openssl'
 gem 'pg', '~> 1.0'
 gem 'puma', '~> 3.7'
-gem 'stellar-sdk', github: 'stellar/ruby-stellar-sdk'
+gem 'stellar-sdk', '~> 0.5'
 gem 'sucker_punch', '~> 2.0'
 gem 'telegram-bot', '~> 0.14'
 gem 'telegram-bot-types', '~> 0.5'

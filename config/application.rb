@@ -23,5 +23,12 @@ module MobiusBot
 
     config.cache_store = :redis_store, "#{config.redis_url}/0/mobius_bot", { expires_in: 90.minutes }
     config.telegram_updates_controller.session_store = :redis_store, { servers: ["#{config.redis_url}/1/mobius_bot"], expires_in: 1.month }
+
+    config.middleware.insert_before 0, Rack::Cors do
+      allow do
+        origins '*'
+        resource '*', headers: :any, methods: [:get, :post, :options]
+      end
+    end
   end
 end

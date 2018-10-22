@@ -5,7 +5,6 @@ class FetchReserveAccountsAction
   executed do |context|
     context.reserve_accounts =
         company_reserve_accounts +
-        cofounder_lockup_accounts +
         revoked_accounts
   end
 
@@ -20,15 +19,6 @@ class FetchReserveAccountsAction
         'GC7TAK53TS5JRG4WL26GTSBWWQPZPJZ6MWE4ZQTLLSDZOOPJPSLUY7AG',
         'GDEUJPHCOKBAHGGM4G7F23GKLPZU4J3LP2UUS2Z4QRP2OZQUD77Y4QR5',
         'GB2CVZFQ5U2VYEW3PUUGQL6DTYAAW7E6MN3OFCVP2CYG6RZP3EMQSZIN', # mobi distribution
-    ]
-  end
-
-  def self.cofounder_lockup_accounts
-    %W[
-      GBWYDFPFQYXXMRWFHQVY7426RNNRAPVHFR5G4ACVAZXFUKZO65PJP3H7
-      GDKTC44HPCLWAUWIO4ROEKAKKK5IS4PFGKRKWNRO4657SDJTSISNVET4
-      GCGQ2DZH5ZNRSX3FFZHVO6XZSAE3PFYILIGJOT7CP4KB3YM3AXG7SDPI
-      GAOMPG27UK62HUFTB27BEC6AGKXQTQDWPTMZVGXLMK32EHPBARMJ3SNT
     ]
   end
 

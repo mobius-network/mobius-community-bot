@@ -21,6 +21,7 @@ gem 'telegram-bot', '~> 0.14'
 gem 'telegram-bot-types', '~> 0.5'
 
 group :development do
+  gem "bundler-audit", require: false
   gem 'listen', '>= 3.0.5', '< 3.2'
   gem 'spring'
   gem 'spring-watcher-listen', '~> 2.0.0'

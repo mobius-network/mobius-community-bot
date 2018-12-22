@@ -46,14 +46,13 @@ class TelegramPricesController < TelegramWebhookController
   def onramps!(*)
     respond_with :message, text: <<-MSG.strip_heredoc, parse_mode: 'Markdown', disable_web_page_preview: true, disable_notification: true
       *Stellar DEX*
+       ➛ [StellarX](https://stellarx.com) (XLM, $)
        ➛ [StellarTerm](https://stellarterm.com) (XLM)
        ➛ [Interstellar](https://interstellar.exchange) (XLM, Ƀ, Ł)
-       ➛ [StellarPort](https://stellarport.io) (XLM)
-       ➛ [Stronghold](https://stronghold.co) (Ƀ, Ξ)
+       ➛ [StellarPort](https://stellarport.io) (XLM, Ƀ, Ł, Ξ)
        ➛ [FireFly](https://fchain.io) (XLM, ¥)
       *Traditional*
        ➛ [Gate.io](https://gate.io) (USD₮, Ƀ, Ξ)
-       ➛ [KuCoin](https://www.kucoin.com) (Ƀ, Ξ)      
        ➛ [GOPAX](https://www.gopax.co.kr) (₩)
        ➛ [Bitmart](https://bitmart.com) (Ξ)
        ➛ [OTC BTC](https://otcbtc.com) (Ƀ, Ξ)

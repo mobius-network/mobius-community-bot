@@ -83,8 +83,8 @@ class TelegramPricesController < TelegramWebhookController
   TICKERS = {
     usdt: [GateIO],
     xlm: [StellarDEX],
-    btc: [GateIO, Kucoin, Stronghold],
-    eth: [GateIO, Kucoin, Stronghold, Bitmart, OtcBtc],
+    btc: [GateIO, Bitmart, Bittrex],
+    eth: [GateIO, Bitmart, OtcBtc],
     krw: [Gopax],
     fiat: [:usdt, :krw],
   }

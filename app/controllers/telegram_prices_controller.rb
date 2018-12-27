@@ -54,6 +54,7 @@ class TelegramPricesController < TelegramWebhookController
       *Traditional*
        ➛ [Gate.io](https://gate.io) (USD₮, Ƀ, Ξ)
        ➛ [GOPAX](https://www.gopax.co.kr) (₩)
+       ➛ [Bittrex](https://bittrex.com/Market/Index?MarketName=BTC-MOBI) (Ƀ)
        ➛ [Bitmart](https://bitmart.com) (Ξ)
        ➛ [OTC BTC](https://otcbtc.com) (Ƀ, Ξ)
     MSG

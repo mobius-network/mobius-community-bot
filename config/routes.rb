@@ -10,7 +10,7 @@ module TelegramWebhooksRouter
       case message
       when %r(^\/(ban|promote|demote))
         TelegramVoteBanController
-      when %r(^\/(price|full_price|onramps|supply))
+      when %r(^\/(supply))
         TelegramPricesController
       else
         TelegramWebhookController

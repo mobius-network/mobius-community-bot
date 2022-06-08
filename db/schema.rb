@@ -10,13 +10,13 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_05_31_115524) do
+ActiveRecord::Schema.define(version: 2022_06_08_211647) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "users", force: :cascade do |t|
-    t.integer "telegram_id"
+    t.bigint "telegram_id"
     t.string "username"
     t.boolean "is_resident", default: false
     t.datetime "created_at", null: false

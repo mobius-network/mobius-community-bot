@@ -3,7 +3,6 @@ class CalculateCirculatingSupply
 
   def self.call
     reduce(
-      FetchTotalSupplyAction,
       FetchReserveAccountsAction,
       CalculateReservesAction
     )

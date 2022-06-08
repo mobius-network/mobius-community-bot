@@ -37,9 +37,10 @@ class TelegramPricesController < TelegramWebhookController
     # 388,120,759.27 are held by the company for development and other purposes
     result = CalculateCirculatingSupply.call
     respond_with :message, text: <<-MSG.strip_heredoc, parse_mode: 'Markdown'
-      `#{number_with_precision(result.circulating_supply, precision: 0, delimiter: ',')} MOBI` in circulation
-      `#{number_with_precision(result.reserved_supply, precision: 0, delimiter: ',')} MOBI` reserved / locked up
-      `#{number_with_precision(result.total_supply, precision: 0, delimiter: ',')} MOBI` total
+      `#{format_supply(result.circulating_supply).rjust(16)}` in circulation
+      `#{format_supply(result.reserved_supply).rjust(16)}` reserved / locked
+      `#{format_supply(result.burned_supply).rjust(16)}` burned
+      `#{format_supply(result.total_supply).rjust(16)}` total
     MSG
   end
 
@@ -77,6 +78,10 @@ class TelegramPricesController < TelegramWebhookController
       format: '%n %u',
       precision: 3
     )
+  end
+
+  def format_supply(amount)
+    number_to_currency(amount, unit: 'MOBI', format: '%n %u', precision: 0, delimiter: ',')
   end
 
   SYMBOLS = { btc: 'Ƀ', ltc: 'Ł', eth: 'Ξ', krw: '₩', usdt: 'USD₮', usd: 'USD', xlm: 'XLM' }.freeze

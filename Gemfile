@@ -1,30 +1,28 @@
 source 'https://rubygems.org'
 
-git_source(:github) { |repo_name| "https://github.com/#{repo_name}.git" }
-
-ruby '~> 2.5'
+ruby '~> 2.7'
 
 gem 'dotenv-rails', require: 'dotenv/rails-now', groups: %i[development test]
-gem 'rails', '~> 5.2.2.1'
+gem 'rails', '~> 5.2.8'
 
 gem 'bigdecimal'
-gem 'dry-initializer', '~> 2.4'
+gem 'dry-initializer', '~> 3.1'
 gem 'redis-rails', '~> 5.0'
-gem 'light-service', '~> 0.10.3'
+gem 'light-service', '~> 0.18'
 gem 'openssl'
-gem 'pg', '~> 1.0'
-gem 'puma', '~> 3.7'
+gem 'pg', '~> 1.3'
+gem 'puma', '~> 5.6'
 gem 'rack-cors', '~> 1.0', require: 'rack/cors'
-gem 'stellar-sdk', '~> 0.5'
-gem 'sucker_punch', '~> 2.0'
-gem 'telegram-bot', '~> 0.14'
-gem 'telegram-bot-types', '~> 0.5'
+gem 'stellar-sdk', '~> 0.32'
+gem 'sucker_punch', '~> 3.0'
+gem 'telegram-bot', '~> 0.15'
+gem 'telegram-bot-types', '~> 0.7'
 
 group :development do
   gem "bundler-audit", require: false
-  gem 'listen', '>= 3.0.5', '< 3.2'
+  gem 'listen'
   gem 'spring'
-  gem 'spring-watcher-listen', '~> 2.0.0'
+  gem 'spring-watcher-listen'
 end
 
 group :development, :test do
